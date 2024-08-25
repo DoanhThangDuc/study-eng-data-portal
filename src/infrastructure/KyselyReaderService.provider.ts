@@ -1,0 +1,41 @@
+import { OnApplicationShutdown } from "@nestjs/common";
+import { Kysely, PostgresDialect } from "kysely";
+import { Pool } from "pg";
+import { ConfigService } from "@nestjs/config";
+import { ConfigurationInterface } from "../pkgs/config/ConfigurationInterface";
+
+export class KyselyReaderService<DB>
+  extends Kysely<DB>
+  implements OnApplicationShutdown
+{
+  private pool: Pool;
+
+  constructor(configService: ConfigService) {
+    // const config = configService.get<ConfigurationInterface["pg"]>("pg");
+
+    const poolPg = new Pool({
+      host: "localhost",
+      port: 5432,
+      user: "postgres",
+      password: "Password",
+      database: "study_eng",
+    });
+
+    super({
+      dialect: new PostgresDialect({
+        pool: poolPg,
+      }),
+    });
+
+    this.pool = poolPg;
+  }
+
+  async onApplicationShutdown(): Promise<void> {
+    this.pool.connect();
+    try {
+      await this.pool.end();
+    } catch (error) {
+      console.error(error);
+    }
+  }
+}
