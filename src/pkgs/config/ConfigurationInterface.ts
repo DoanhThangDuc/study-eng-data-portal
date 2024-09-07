@@ -2,9 +2,8 @@ export interface ConfigurationInterface {
   pg: {
     host: string;
     port: number;
-    db: string;
+    database: string;
     user: string;
-    pass: string;
-    max: number;
+    password: string;
   };
 }

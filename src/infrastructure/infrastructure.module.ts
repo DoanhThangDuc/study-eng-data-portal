@@ -2,13 +2,16 @@ import { Module } from "@nestjs/common";
 import { KyselyReaderService } from "./KyselyReaderService.provider";
 import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DB } from "../db/types";
+import configuration from "../pkgs/config/configuration";
+import { JwtStrategy } from "./JwtStrategy.provider";
 
 @Module({
   controllers: [],
   imports: [
     ConfigModule.forRoot({
+      load: [configuration],
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV}`,
+      envFilePath: `.env.${process.env.NODE_ENV} || "development`,
     }),
   ],
   providers: [
@@ -19,6 +22,7 @@ import { DB } from "../db/types";
       },
       inject: [ConfigService],
     },
+    JwtStrategy,
   ],
   exports: [KyselyReaderService],
 })

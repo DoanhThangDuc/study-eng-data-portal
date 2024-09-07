@@ -1,16 +1,21 @@
-import { Generated, Insertable, Selectable, Updateable } from "kysely";
+import { ColumnType, Insertable, Updateable } from "kysely";
+
+export type Generated<T> =
+  T extends ColumnType<infer S, infer I, infer U>
+    ? ColumnType<S, I | undefined, U>
+    : ColumnType<T, T | undefined, T>;
 
 export type DB = {
-  user: User;
+  User: User;
 };
 
-export interface User {
-  id: Generated<number>;
-  email: string;
+export type User = {
+  id: string;
+  emailAddress: string;
   firstName: string;
   lastName: string;
-}
-
-export type Person = Selectable<User>;
-export type NewPerson = Insertable<User>;
-export type PersonUpdate = Updateable<User>;
+  passwordHashAlgorithm?: string;
+  passwordHash?: string;
+  passwordHashSalt?: string;
+  password?: string;
+};

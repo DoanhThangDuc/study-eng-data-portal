@@ -1,21 +1,23 @@
 import { Injectable } from "@nestjs/common";
-import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
+import { UserCreatePayloadDto } from "./dtos/UserCreatePayloadDto";
 import { KyselyReaderService } from "../../infrastructure/KyselyReaderService.provider";
 import { DB } from "../../db/types";
+import { UserRegisterAction } from "./actions/UserRegisterAction";
 
 @Injectable()
 export class UserRegisterInteractor {
-  constructor(private kyselyReaderService: KyselyReaderService<DB>) {}
-  async execute(payload: UserCreatePayloadDto) {
-    const user = await this.kyselyReaderService
-      .insertInto("user")
-      .values({
-        email: "Jennifer",
-        firstName: "Aniston",
-        lastName: "Doanh",
-      })
-      .executeTakeFirst();
+  constructor(
+    private readonly kyselyReaderService: KyselyReaderService<DB>,
+    private readonly userRegisterAction: UserRegisterAction,
+  ) {}
+  async execute(context: any, payload: UserCreatePayloadDto) {
+    const { accessToken, refreshToken, userResponse } =
+      await this.userRegisterAction.execute(payload);
 
-    return user;
+    return {
+      accessToken,
+      refreshToken,
+      userResponse,
+    };
   }
 }

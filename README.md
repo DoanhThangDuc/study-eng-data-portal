@@ -1,26 +1,31 @@
 ## Set up database
 **Postgres Master** 
 
-1. Create user 
-```bash
-sudo -u postgres createuser --superuser postgres
-```
-
-2. Login into PostgreSQL
+1. Login into PostgreSQL
 ```bash
 psql -U postgres
 ```
 
 2. Create Database
-
-```
-CREATE DATABASE study-eng;
+```bash
+CREATE DATABASE "study-eng";
 ```
 
 ## Installation
 
 ```bash
 $ npm install
+```
+
+## Migration
+1. Create migration file
+```bash
+knex migrate:make migration_name -x ts
+```
+
+2. Run command line to execute migration
+```bash
+npm run migrate:latest
 ```
 
 ## Running the app
@@ -48,16 +53,6 @@ $ npm run test:e2e
 # test coverage
 $ npm run test:cov
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
 
 ## License
 
