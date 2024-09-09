@@ -20,7 +20,7 @@
     "test:cov": "cross-env NODE_ENV=test jest --coverage",
     "test:debug": "cross-env NODE_ENV=test node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:integration": "NODE_ENV=test jest --config ./test/jest.config.integration.ts",
-    "test:integration:user": "npm run test:integration -- user.spec.ts"
+    "test:integration:user": "DATABASE_NAME=test_user npm run test:integration -- user.spec.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -36,6 +36,7 @@
     "class-transformer": "^0.5.1",
     "class-validator": "^0.14.1",
     "cross-env": "^7.0.3",
+    "dotenv": "^16.4.5",
     "jsonwebtoken": "^9.0.2",
     "knex": "^3.1.0",
     "kysely": "^0.27.4",
@@ -46,7 +47,8 @@
     "reflect-metadata": "^0.2.0",
     "routing-controllers": "^0.10.4",
     "rxjs": "^7.8.1",
-    "uuid": "^10.0.0"
+    "uuid": "^10.0.0",
+    "vercel": "^37.4.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",

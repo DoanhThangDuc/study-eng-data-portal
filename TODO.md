@@ -1,7 +1,7 @@
 ## Todo list for the project
 
 - set up environment variables (doing)
-  - fix port
+  - fix port (done)
   - implement for testing
 
 - implement sign up flow (using JWT)

@@ -39,4 +39,6 @@ describe("POST /v1/users", () => {
       },
     });
   });
+
+  it.only("should thow error when user email address is already in use", () => {});
 });
