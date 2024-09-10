@@ -1,4 +1,11 @@
-import { Body, Controller, Post, Req, ValidationPipe } from "@nestjs/common";
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Req,
+  ValidationPipe,
+} from "@nestjs/common";
 import { UserRegisterInteractor } from "../domains/User/UserRegisterInteractor";
 import { UserCreatePayloadDto } from "../domains/User/dtos/UserCreatePayloadDto";
 
@@ -11,5 +18,10 @@ export class UserController {
     @Req() request: any,
   ) {
     return this.userRegisterInteractor.execute(request, payload);
+  }
+
+  @Get("/users")
+  getHello(): string {
+    return "Hello World Product From Git!";
   }
 }
