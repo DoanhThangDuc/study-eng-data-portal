@@ -19,9 +19,4 @@ export class UserController {
   ) {
     return this.userRegisterInteractor.execute(request, payload);
   }
-
-  @Get("/users")
-  getHello(): string {
-    return "Hello World Product From Git!";
-  }
 }

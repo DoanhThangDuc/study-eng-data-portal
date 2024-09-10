@@ -6,6 +6,6 @@ export class AppController {
 
   @Get()
   getHello(): string {
-    return "Hello World";
+    return "Hello this is a non-profit project to support students to learn English";
   }
 }
