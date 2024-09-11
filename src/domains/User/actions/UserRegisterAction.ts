@@ -8,10 +8,15 @@ import { PasswordHasher } from "./PasswordHasher";
 import * as jwt from "jsonwebtoken";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
+import { ConfigService } from "@nestjs/config";
+import { ConfigurationInterface } from "../../../pkgs/config/ConfigurationInterface";
 
 @Injectable()
 export class UserRegisterAction {
-  constructor(private readonly kyselyReaderService: KyselyReaderService<DB>) {}
+  constructor(
+    private readonly kyselyReaderService: KyselyReaderService<DB>,
+    private readonly configService: ConfigService,
+  ) {}
   async execute(payload: UserCreatePayloadDto): Promise<{
     accessToken: string;
     refreshToken: string;
@@ -19,10 +24,20 @@ export class UserRegisterAction {
   }> {
     // TODO: need to use passport or other way to check
     const emailAddress = payload.emailAddress.toLowerCase();
+    console.log(
+      "process.env.HASH_SALT_LOG_ROUNDS",
+      process.env.HASH_SALT_LOG_ROUNDS,
+    );
+
     await this.checkEmailExists(emailAddress);
     const userId = uuidv4();
 
     // TODO: change this to env
+    const rounds =
+      this.configService.get<ConfigurationInterface>(
+        "config",
+      ).hashSaltLogRounds;
+
     const { hash, salt, algorithm } = await new PasswordHasher(10).hash(
       payload.preHashedPassword,
     );

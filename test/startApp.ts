@@ -1,6 +1,6 @@
 import * as pg from "pg";
-import { appConfigs } from "../src/pkgs/config/AppConfigs";
 import * as Knex from "knex";
+import { appConfigs } from "../src/pkgs/config/AppConfigs";
 
 async function queryWithLog(client: pg.Client, command: string) {
   try {

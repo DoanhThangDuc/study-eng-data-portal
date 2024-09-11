@@ -9,7 +9,7 @@ export class IllegalStateError extends HttpError {
   toJSON(): Record<string, string | Record<string, string>> {
     return {
       type: "IllegalState",
-      options: {},
+      options: this.stack,
       status: "ERROR",
       debugMessage: this.debugMessage,
     };
