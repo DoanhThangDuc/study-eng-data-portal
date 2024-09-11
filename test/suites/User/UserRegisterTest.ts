@@ -40,5 +40,36 @@ describe("POST /v1/users", () => {
     });
   });
 
-  it.only("should thow error when user email address is already in use", () => {});
+  it("should thow error when user email address is already in use", async () => {
+    // arrange - calling endpoint user sign up
+    await request(app.getHttpServer())
+      .post("/v1/users")
+      .send({
+        emailAddress: "user@example.com",
+        firstName: "John",
+        lastName: "Doe",
+        preHashedPassword:
+          "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
+      })
+      .expect(201);
+
+    // act - create a new user with existing email
+    const responseExistingEmail = await request(app.getHttpServer())
+      .post("/v1/users")
+      .send({
+        emailAddress: "user@example.com",
+        firstName: "John",
+        lastName: "Doe",
+        preHashedPassword:
+          "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
+      });
+
+    // assert - should validate user payload
+    console.log("responseExistingEmail", responseExistingEmail.body);
+
+    expect(pick(responseExistingEmail, ["status", "body"])).toMatchObject({
+      status: 409,
+      body: { statusCode: 409, message: "CONFLICT" },
+    });
+  });
 });

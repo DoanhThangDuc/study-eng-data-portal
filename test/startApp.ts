@@ -1,9 +1,9 @@
 import * as pg from "pg";
 import { appConfigs } from "../src/pkgs/config/AppConfigs";
+import * as Knex from "knex";
 
 async function queryWithLog(client: pg.Client, command: string) {
   try {
-    console.log("client.query", client.query);
     return await client.query(command);
   } catch (error) {
     console.error(error);
@@ -11,19 +11,25 @@ async function queryWithLog(client: pg.Client, command: string) {
   }
 }
 
-async function isDatabaseExisted(
-  query: pg.Client,
-  appDB: string,
-): Promise<boolean> {
-  const database = query.query(`SELECT datname 
-FROM pg_database 
-WHERE datname = ${process.env.DB_NAME};
-`);
+export async function migrateDatabase() {
+  const knex = Knex({
+    client: "pg",
+    connection: {
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASSWORD,
+      database: process.env.DATABASE_NAME,
+    },
+    migrations: {
+      directory: "src/knexMigrations",
+    },
+  });
 
-  console.log("process.env.DB_NAME", process.env.DB_NAME);
-
-  return !!database;
+  // Run migrations
+  await knex.migrate.latest();
+  await knex.destroy();
 }
+
 export async function startApp() {
   console.time("setUpApp");
 
@@ -32,18 +38,24 @@ export async function startApp() {
   const client = new pg.Client({
     host: appConfigs.pgHost,
     port: appConfigs.pgPort,
+    database: "postgres",
     user: appConfigs.pgUser,
     password: appConfigs.pgPass,
-    database: "postgres",
   });
 
+  await client.connect();
+
   const DB = process.env.DATABASE_NAME || "";
-  const bool = await isDatabaseExisted(client, DB);
-  console.log("bool", bool);
 
+  // Delete database if it exists
   await queryWithLog(client, `DROP DATABASE IF EXISTS ${DB};`);
-  // await queryWithLog(client, `CREATE DATABASE ${DB};`);
 
-  // check if database already exists
-  // drop database
+  // Create new database instance with empty data
+  await queryWithLog(client, `CREATE DATABASE ${DB};`);
+
+  await client.end();
+  console.time("Database created successfully");
+
+  // Migrate database
+  await migrateDatabase();
 }

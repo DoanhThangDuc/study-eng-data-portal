@@ -1,7 +1,7 @@
-import { setUpApp } from "./setUpApp";
+import { startApp } from "./startApp";
 
 beforeAll(async () => {
-  await setUpApp();
+  await startApp();
 }, 180000);
 
 afterAll(async () => {});
