@@ -8,7 +8,7 @@ export class EmailExistsError extends HttpException {
   toJSON(): Record<string, string | Record<string, string>> {
     return {
       type: "EmailExists",
-      options: {},
+      options: this.stack,
       status: "ERROR",
       debugMessage: "This email address is already being used",
     };

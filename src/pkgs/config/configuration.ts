@@ -4,7 +4,9 @@ import { ConfigurationInterface } from "./ConfigurationInterface";
 export default registerAs("config", () => {
   const configuration: ConfigurationInterface = {
     port: Number.parseInt(process.env.PORT) || 4200,
-    hashSaltLogRounds: Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10,
+    hashSaltLogRounds: Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS),
+    jwtSecret: process.env.JWT_SECRET_KEY || "secret",
+    expiresIn: process.env.TOKEN_EXPIRATION_TIME || "1h",
     pg: {
       host: process.env.DATABASE_HOST || "localhost",
       port: Number.parseInt(process.env.DATABASE_PORT, 10) || 5432,
