@@ -9,7 +9,7 @@
 # .env
 .env.test
 .env.staging
-.env.prodution
+.env.production
 
 # Logs
 logs
