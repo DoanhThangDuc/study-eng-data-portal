@@ -7,15 +7,14 @@ import { PasswordHasher } from "./PasswordHasher";
 import * as jwt from "jsonwebtoken";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
-import { ConfigService } from "@nestjs/config";
-import { ConfigurationInterface } from "../../../pkgs/config/ConfigurationInterface";
 import { generateAccessToken, TokenUser } from "../../TokenUser";
+import { AppConfigsEnvironment } from "../../../pkgs/config/AppConfigsEnvironment";
 
 @Injectable()
 export class UserRegisterAction {
   constructor(
     private readonly kyselyReaderService: KyselyReaderService<DB>,
-    private configService: ConfigService,
+    private appConfigs: AppConfigsEnvironment,
   ) {}
   async execute(payload: UserCreatePayloadDto): Promise<{
     accessToken: string;
@@ -29,14 +28,9 @@ export class UserRegisterAction {
     await this.checkEmailExists(emailAddress);
     const userId = uuidv4();
 
-    const rounds =
-      this.configService.get<ConfigurationInterface>(
-        "config",
-      ).hashSaltLogRounds;
-
-    const { hash, salt, algorithm } = await new PasswordHasher(rounds).hash(
-      payload.preHashedPassword,
-    );
+    const { hash, salt, algorithm } = await new PasswordHasher(
+      this.appConfigs.hashSaltLogRounds,
+    ).hash(payload.preHashedPassword);
 
     const userInput: Partial<User> = {
       id: userId,
@@ -61,8 +55,8 @@ export class UserRegisterAction {
 
     const { accessToken } = generateAccessToken(
       tokenUser,
-      this.configService.get<ConfigurationInterface>("config").jwtSecret,
-      this.configService.get<ConfigurationInterface>("config").expiresIn,
+      this.appConfigs.jwtSecret,
+      this.appConfigs.expiresIn,
     );
 
     return {

@@ -8,6 +8,9 @@ export interface AppConfigs {
   pgPort: number;
   pgUser: string;
   pgPass: string;
+  jwtSecret: string;
+  expiresIn: string;
+  hashSaltLogRounds: number;
 }
 
 export const appConfigs: AppConfigs = new AppConfigsEnvironment();

@@ -2,10 +2,10 @@ import { pick } from "lodash";
 import { getTestUserModule } from "./getTestUserModule";
 import TestAgent from "supertest/lib/agent";
 import { HttpStatus } from "@nestjs/common";
+import { Test } from "supertest";
 
 describe("POST /v1/users", () => {
-  let request: TestAgent<any>; // TODO: refactor later
-
+  let request: TestAgent<Test>;
   beforeEach(async () => {
     const appContext = getTestUserModule();
     ({ request } = appContext);

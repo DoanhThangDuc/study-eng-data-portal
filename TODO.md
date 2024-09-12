@@ -8,7 +8,7 @@
     - handle exception filter, validation (done)
 - fixing env variables return underfined (done)
 
-- changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret...
+- changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret... (done)
 - using passport user
 - implement refresh token
 

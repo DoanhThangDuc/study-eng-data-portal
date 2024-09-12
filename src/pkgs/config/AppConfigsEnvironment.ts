@@ -29,4 +29,13 @@ export class AppConfigsEnvironment implements AppConfigs {
   get pgPass(): string {
     return process.env.DATABASE_PASSWORD || "password";
   }
+  get hashSaltLogRounds(): number {
+    return Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10;
+  }
+  get jwtSecret(): string {
+    return process.env.JWT_SECRET_KEY || "secret";
+  }
+  get expiresIn(): string {
+    return process.env.TOKEN_EXPIRATION_TIME || "1h";
+  }
 }
