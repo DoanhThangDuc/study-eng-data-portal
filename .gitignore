@@ -6,6 +6,11 @@
 # vercel
 ./vercel
 
+# .env
+.env.test
+.env.staging
+.env.prodution
+
 # Logs
 logs
 *.log
