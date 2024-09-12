@@ -5,6 +5,7 @@
   - implement for testing
     - Investigate why test can not connect to DB (even though database name is set) (done)
     - Implement migration for testing database (done)
+    - handle exception filter, validation (done)
 - fixing env variables return underfined (done)
 
 - changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret...
