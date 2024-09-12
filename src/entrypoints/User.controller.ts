@@ -1,11 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  Post,
-  Req,
-  ValidationPipe,
-} from "@nestjs/common";
+import { Body, Controller, Post, Req, ValidationPipe } from "@nestjs/common";
 import { UserRegisterInteractor } from "../domains/User/UserRegisterInteractor";
 import { UserCreatePayloadDto } from "../domains/User/dtos/UserCreatePayloadDto";
 

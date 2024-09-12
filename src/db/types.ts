@@ -14,6 +14,9 @@ export type User = {
   emailAddress: string;
   firstName: string;
   lastName: string;
+  emailAddressVerified: boolean;
+  administrator: boolean;
+  enabled: boolean;
   passwordHashAlgorithm?: string;
   passwordHash?: string;
   passwordHashSalt?: string;

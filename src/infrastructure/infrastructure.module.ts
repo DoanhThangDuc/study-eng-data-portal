@@ -11,7 +11,7 @@ import { JwtStrategy } from "./JwtStrategy.provider";
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
-      envFilePath: `.env.${process.env.NODE_ENV} || "development`,
+      envFilePath: [`.env.${process.env.NODE_ENV}`, ".env.staging"],
     }),
   ],
   providers: [
