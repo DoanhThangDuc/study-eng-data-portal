@@ -1,8 +1,10 @@
-import { HttpException, HttpStatus } from "@nestjs/common";
+import { HttpStatus } from "@nestjs/common";
+import { HttpError } from "routing-controllers";
 
-export class EmailExistsError extends HttpException {
+export class EmailExistsError extends HttpError {
   constructor() {
-    super("CONFLICT", HttpStatus.CONFLICT);
+    super(HttpStatus.CONFLICT);
+    Object.setPrototypeOf(this, EmailExistsError.prototype);
   }
 
   toJSON(): Record<string, string | Record<string, string>> {

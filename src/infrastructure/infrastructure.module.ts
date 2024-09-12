@@ -4,6 +4,8 @@ import { ConfigModule, ConfigService } from "@nestjs/config";
 import { DB } from "../db/types";
 import configuration from "../pkgs/config/configuration";
 import { JwtStrategy } from "./JwtStrategy.provider";
+import { appConfigs } from "../pkgs/config/AppConfigs";
+import { AppConfigsEnvironment } from "../pkgs/config/AppConfigsEnvironment";
 
 @Module({
   controllers: [],
@@ -22,8 +24,12 @@ import { JwtStrategy } from "./JwtStrategy.provider";
       },
       inject: [ConfigService],
     },
+    {
+      provide: AppConfigsEnvironment,
+      useValue: appConfigs,
+    },
     JwtStrategy,
   ],
-  exports: [KyselyReaderService],
+  exports: [KyselyReaderService, AppConfigsEnvironment],
 })
 export class InfrastructureModule {}
