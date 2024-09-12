@@ -30,7 +30,9 @@ export async function migrateDatabase() {
   await knex.destroy();
 }
 
-export async function startApp() {
+export async function startApp(): Promise<{
+  client: pg.Client;
+}> {
   console.time("setUpApp");
 
   appConfigs.setup();
@@ -58,4 +60,8 @@ export async function startApp() {
 
   // Migrate database
   await migrateDatabase();
+
+  return {
+    client,
+  };
 }

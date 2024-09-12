@@ -1,5 +1,4 @@
 import { startApp } from "./startApp";
-import "../test/suites/User/UserRegisterTest";
 import { setTestUserModule } from "./suites/User/getTestUserModule";
 
 beforeAll(async () => {
@@ -8,3 +7,5 @@ beforeAll(async () => {
 }, 180000);
 
 afterAll(async () => {});
+
+import "../test/suites/User/UserRegisterTest";
