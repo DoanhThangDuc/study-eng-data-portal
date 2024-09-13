@@ -11,6 +11,8 @@
 
 - changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret... (done)
 - impplement throw error when still have data left after each test 
+- investigate whether database connection is closed after spect tests
+- investigate connect staging database in vercel
 - using passport user
 - implement refresh token
 
