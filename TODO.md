@@ -15,14 +15,18 @@
   - jwt local to use for specific routes (done)
   - jwt auth guard use for whole app (done)
 
+- implement sign up flow (using JWT) (done)
+- implement sign in flow (using JWT) (done)
+
+- implement testing sigin flow 
+- implement refresh token
+
 - impplement throw error when still have data left after each test (investigating)
 - investigate whether database connection is closed after spect tests (investigating)
 - investigate connect staging database in vercel (maybe consider using free aws)
 
 - implement refresh token
 
-- implement sign up flow (using JWT) (done)
-- implement sign in flow (using JWT) (doing)
 - implement testing flow instance (doing)
 - implement global catch custom exception (implement in testing also)
 

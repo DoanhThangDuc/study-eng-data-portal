@@ -2,7 +2,6 @@ import { Injectable } from "@nestjs/common";
 import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
 import { UserRegisterAction } from "./UserRegisterAction";
 import { InteractorContext } from "../../InteractorContext";
-import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
 
 @Injectable()
 export class UserRegisterInteractor {

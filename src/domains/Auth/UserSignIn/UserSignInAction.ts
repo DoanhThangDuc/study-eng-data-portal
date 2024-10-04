@@ -1,31 +1,73 @@
-import { Injectable } from "@nestjs/common";
+import { Injectable, UnauthorizedException } from "@nestjs/common";
 import { UserSignInPayloadDto } from "../dtos/UserSignInPayloadDto";
-import { JwtService } from "@nestjs/jwt";
 import { DB } from "../../../db/types";
 import { KyselyReaderService } from "../../../infrastructure/KyselyReaderService.provider";
+import { InteractorContext } from "../../InteractorContext";
+import { PasswordHasher } from "../actions/PasswordHasher";
+import { TokenGenerator } from "../actions/TokenGenerator";
+import { TokenUser } from "../../TokenUser";
 
 @Injectable()
 export class UserSignInAction {
   constructor(
-    private readonly jwtService: JwtService,
+    private readonly tokenGenerator: TokenGenerator,
     private readonly kyselyReaderService: KyselyReaderService<DB>,
+    private readonly passwordHasher: PasswordHasher,
   ) {}
 
-  async validateUser(payload: UserSignInPayloadDto) {
-    const [user] = await this.kyselyReaderService
+  async execute(
+    context: InteractorContext,
+    payload: UserSignInPayloadDto,
+  ): Promise<{
+    accessToken: string;
+    refreshToken: string;
+    userResponse: TokenUser;
+  }> {
+    const { passwordHash, ...userResponse } = await this.getUserResponse(
+      payload.emailAddress,
+    );
+
+    if (!userResponse) {
+      throw new UnauthorizedException("User not found!");
+    }
+
+    await this.passwordHasher.comparePassword(payload.password, passwordHash);
+
+    const [accessToken, refreshToken] = await Promise.all([
+      this.tokenGenerator.generateAccessToken(userResponse),
+      this.tokenGenerator.generateAccessToken(userResponse),
+    ]);
+
+    context.user = userResponse;
+
+    return {
+      userResponse: userResponse,
+      accessToken,
+      refreshToken,
+    };
+  }
+
+  async getUserResponse(emailAddress: string): Promise<
+    TokenUser & {
+      passwordHash: string;
+    }
+  > {
+    const [userResponse] = await this.kyselyReaderService
       .selectFrom("User")
       .select("User.id")
       .select("User.emailAddress")
+      .select("User.firstName")
+      .select("User.lastName")
       .select("User.emailAddressVerified")
       .select("User.administrator")
       .select("User.enabled")
-      .where("User.emailAddress", "=", payload.emailAddress.toLowerCase())
+      .select("User.passwordHash")
+      .select("User.passwordHash")
+      .where("User.emailAddress", "=", emailAddress.toLowerCase())
       .execute();
 
-    // Compare 2 passwords in here
+    if (!userResponse) return null;
 
-    if (!user) return null;
-
-    // return this.jwtService.sign(user);
+    return userResponse;
   }
 }

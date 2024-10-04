@@ -6,7 +6,6 @@ import { PasswordHasher } from "../actions/PasswordHasher";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
 import { TokenUser } from "../../TokenUser";
-import { AppConfigsEnvironment } from "../../../pkgs/config/AppConfigsEnvironment";
 import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
 import { JwtService } from "@nestjs/jwt";
 import { InteractorContext } from "../../InteractorContext";
@@ -15,8 +14,8 @@ import { InteractorContext } from "../../InteractorContext";
 export class UserRegisterAction {
   constructor(
     private readonly kyselyReaderService: KyselyReaderService<DB>,
-    private readonly appConfigs: AppConfigsEnvironment,
     private readonly jwtService: JwtService,
+    private readonly passwordHasher: PasswordHasher,
   ) {}
   async execute(
     context: InteractorContext,
@@ -38,9 +37,8 @@ export class UserRegisterAction {
     await this.checkEmailExists(emailAddress);
     const userId = uuidv4();
 
-    const { hash, salt, algorithm } = await new PasswordHasher(
-      this.appConfigs.hashSaltLogRounds,
-    ).hash(preHashedPassword);
+    const { hash, salt, algorithm } =
+      await this.passwordHasher.hash(preHashedPassword);
 
     const userInput: Partial<User> = {
       id: userId,
@@ -59,8 +57,10 @@ export class UserRegisterAction {
 
     const tokenUser: TokenUser = {
       id: createdUser.id,
-      emailAddressVerified: createdUser.emailAddressVerified,
       emailAddress: createdUser.emailAddress,
+      firstName: createdUser.firstName,
+      lastName: createdUser.lastName,
+      emailAddressVerified: createdUser.emailAddressVerified,
       administrator: createdUser.administrator,
       enabled: createdUser.enabled,
     };

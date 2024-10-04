@@ -4,17 +4,16 @@ import {
   Get,
   Post,
   Req,
-  UseGuards,
+  Res,
   ValidationPipe,
 } from "@nestjs/common";
 import { UserCreatePayloadDto } from "../domains/Auth/UserRegister/UserCreatePayloadDto";
 import { UserRegisterInteractor } from "../domains/Auth/UserRegister/UserRegisterInteractor";
 import { UserSignInPayloadDto } from "../domains/Auth/dtos/UserSignInPayloadDto";
 import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInteractor";
-import { JwtAuthGuard } from "../infrastructure/JwtAuthGuard.provider";
-import { Request } from "express";
 import { AppRequest } from "../domains/InteractorContext";
 import { IllegalStateError } from "../pkgs/errors/IllegalStateError";
+import { Response } from "express";
 
 @Controller("/v1")
 export class AuthController {
@@ -32,12 +31,22 @@ export class AuthController {
   }
 
   @Post("/users/login")
-  userSignIn(@Body(new ValidationPipe()) payload: UserSignInPayloadDto) {
-    return this.userSignInInteractor.execute(payload);
+  async userSignIn(
+    @Req() request: AppRequest,
+    @Res() res: Response,
+    @Body(new ValidationPipe()) payload: UserSignInPayloadDto,
+  ) {
+    const { accessToken, refreshToken, userResponse } =
+      await this.userSignInInteractor.execute(request, payload);
+
+    res.setHeader("Authorization", accessToken);
+    res.setHeader("RefreshToken", refreshToken);
+
+    return res.status(200).json(userResponse);
   }
 
   @Get("/status")
-  getStatus(@Req() request: Request) {
+  getStatus(@Req() request: AppRequest) {
     if (!request.user) {
       throw new IllegalStateError("User not logged");
     }

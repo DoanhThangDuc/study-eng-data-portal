@@ -3,8 +3,10 @@ import { JwtPayload } from "jsonwebtoken";
 
 export type TokenUser = {
   readonly id: string;
-  readonly emailAddressVerified: boolean;
   readonly emailAddress: string;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly emailAddressVerified: boolean;
   readonly administrator: boolean;
   readonly enabled: boolean;
 };

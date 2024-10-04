@@ -6,6 +6,8 @@ import { InfrastructureModule } from "../../infrastructure/infrastructure.module
 import { UserSignInAction } from "./UserSignIn/UserSignInAction";
 import { UserSignInInteractor } from "./UserSignIn/UserSignInInteractor";
 import { PassportModule } from "@nestjs/passport";
+import { PasswordHasher } from "./actions/PasswordHasher";
+import { TokenGenerator } from "./actions/TokenGenerator";
 
 @Module({
   imports: [InfrastructureModule, PassportModule],
@@ -15,6 +17,8 @@ import { PassportModule } from "@nestjs/passport";
     UserRegisterAction,
     UserSignInInteractor,
     UserSignInAction,
+    PasswordHasher,
+    TokenGenerator,
   ],
 })
 export class AuthModule {}
