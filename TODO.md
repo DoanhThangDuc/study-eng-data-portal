@@ -11,17 +11,19 @@
 - comment JwtStrategy in infrastructure module then get error -> try to response error to client (done)
 - changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret... (done)
 
-- using passport user (doing)
-  - jwt local to use for specific routes 
-  - jwt auth guard use for whole app
+- using passport user (done)
+  - jwt local to use for specific routes (done)
+  - jwt auth guard use for whole app (done)
 
 - impplement throw error when still have data left after each test (investigating)
 - investigate whether database connection is closed after spect tests (investigating)
 - investigate connect staging database in vercel (maybe consider using free aws)
+
 - implement refresh token
 
-- implement sign up flow (using JWT)
-- implement testing flow instance
+- implement sign up flow (using JWT) (done)
+- implement sign in flow (using JWT) (doing)
+- implement testing flow instance (doing)
 - implement global catch custom exception (implement in testing also)
 
 - will learn about mechanism for unique vanity name and user generate id

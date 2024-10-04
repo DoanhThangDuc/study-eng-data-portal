@@ -13,6 +13,8 @@ import { UserSignInPayloadDto } from "../domains/Auth/dtos/UserSignInPayloadDto"
 import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInteractor";
 import { JwtAuthGuard } from "../infrastructure/JwtAuthGuard.provider";
 import { Request } from "express";
+import { AppRequest } from "../domains/InteractorContext";
+import { IllegalStateError } from "../pkgs/errors/IllegalStateError";
 
 @Controller("/v1")
 export class AuthController {
@@ -21,10 +23,10 @@ export class AuthController {
     private userSignInInteractor: UserSignInInteractor,
   ) {}
 
-  @Post("/users")
+  @Post("/users/signup")
   userRegister(
     @Body(new ValidationPipe()) payload: UserCreatePayloadDto,
-    @Req() request: any,
+    @Req() request: AppRequest,
   ) {
     return this.userRegisterInteractor.execute(request, payload);
   }
@@ -35,8 +37,10 @@ export class AuthController {
   }
 
   @Get("/status")
-  @UseGuards(JwtAuthGuard)
   getStatus(@Req() request: Request) {
-    return "OK";
+    if (!request.user) {
+      throw new IllegalStateError("User not logged");
+    }
+    return request.user;
   }
 }

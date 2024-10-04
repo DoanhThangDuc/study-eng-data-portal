@@ -47,9 +47,10 @@ export function generateUserRefreshToken(
 
 export async function validateAccessToken(
   token: string,
+  secret: string,
 ): Promise<JwtPayload | null> {
   try {
-    const decoded = jwt.verify(token, this.JWT_SECRET) as JwtPayload;
+    const decoded = jwt.verify(token, secret) as JwtPayload;
 
     return decoded;
   } catch (err) {

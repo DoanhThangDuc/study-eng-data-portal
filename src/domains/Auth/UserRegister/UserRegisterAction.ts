@@ -5,23 +5,34 @@ import { v4 as uuidv4 } from "uuid";
 import { PasswordHasher } from "../actions/PasswordHasher";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
-import { generateAccessToken, TokenUser } from "../../TokenUser";
+import { TokenUser } from "../../TokenUser";
 import { AppConfigsEnvironment } from "../../../pkgs/config/AppConfigsEnvironment";
 import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
+import { JwtService } from "@nestjs/jwt";
+import { InteractorContext } from "../../InteractorContext";
 
 @Injectable()
 export class UserRegisterAction {
   constructor(
     private readonly kyselyReaderService: KyselyReaderService<DB>,
-    private appConfigs: AppConfigsEnvironment,
+    private readonly appConfigs: AppConfigsEnvironment,
+    private readonly jwtService: JwtService,
   ) {}
-  async execute(payload: UserCreatePayloadDto): Promise<{
+  async execute(
+    context: InteractorContext,
+    payload: UserCreatePayloadDto,
+  ): Promise<{
     accessToken: string;
     refreshToken: string;
     userResponse: TokenUser;
   }> {
-    // TODO: need to use passport or other way to check if user is existing
+    const { user } = context;
 
+    if (user) {
+      throw new IllegalStateError("Can't upgrade not anonymous user");
+    }
+
+    const { firstName, lastName, preHashedPassword } = payload;
     const emailAddress = payload.emailAddress.toLowerCase();
 
     await this.checkEmailExists(emailAddress);
@@ -29,13 +40,13 @@ export class UserRegisterAction {
 
     const { hash, salt, algorithm } = await new PasswordHasher(
       this.appConfigs.hashSaltLogRounds,
-    ).hash(payload.preHashedPassword);
+    ).hash(preHashedPassword);
 
     const userInput: Partial<User> = {
       id: userId,
       emailAddress,
-      firstName: payload.firstName,
-      lastName: payload.lastName,
+      firstName: firstName,
+      lastName: lastName,
       passwordHashAlgorithm: algorithm,
       passwordHash: hash,
       passwordHashSalt: salt,
@@ -45,6 +56,7 @@ export class UserRegisterAction {
     if (!createdUser) {
       throw new IllegalStateError("User should be created");
     }
+
     const tokenUser: TokenUser = {
       id: createdUser.id,
       emailAddressVerified: createdUser.emailAddressVerified,
@@ -53,11 +65,7 @@ export class UserRegisterAction {
       enabled: createdUser.enabled,
     };
 
-    const { accessToken } = generateAccessToken(
-      tokenUser,
-      this.appConfigs.jwtSecret,
-      this.appConfigs.expiresIn,
-    );
+    const accessToken = this.jwtService.sign(tokenUser);
 
     return {
       userResponse: tokenUser,

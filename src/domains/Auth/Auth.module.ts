@@ -6,7 +6,6 @@ import { InfrastructureModule } from "../../infrastructure/infrastructure.module
 import { UserSignInAction } from "./UserSignIn/UserSignInAction";
 import { UserSignInInteractor } from "./UserSignIn/UserSignInInteractor";
 import { PassportModule } from "@nestjs/passport";
-import { LocalStrategy } from "./strategies/local.strategy";
 
 @Module({
   imports: [InfrastructureModule, PassportModule],
@@ -16,7 +15,6 @@ import { LocalStrategy } from "./strategies/local.strategy";
     UserRegisterAction,
     UserSignInInteractor,
     UserSignInAction,
-    LocalStrategy,
   ],
 })
 export class AuthModule {}

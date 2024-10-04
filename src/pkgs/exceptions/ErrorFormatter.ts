@@ -13,5 +13,10 @@ export class ErrorFormatter {
         fieldErrors: errorResponse,
       };
     }
+
+    return {
+      status: exception.getStatus(),
+      body: exception.getResponse(),
+    };
   }
 }

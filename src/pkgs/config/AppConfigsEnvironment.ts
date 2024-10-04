@@ -33,7 +33,7 @@ export class AppConfigsEnvironment implements AppConfigs {
     return Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10;
   }
   get jwtSecret(): string {
-    return process.env.JWT_SECRET || "secret";
+    return process.env.JWT_ACCESSTOKEN_SECRET_SECRET || "secret";
   }
   get expiresIn(): string {
     return process.env.TOKEN_EXPIRATION_TIME || "1h";
