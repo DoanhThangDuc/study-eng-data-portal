@@ -9,6 +9,7 @@ import { HttpAdapterHost } from "@nestjs/core";
 import { Response } from "express";
 import { HttpError } from "routing-controllers";
 import { ErrorFormatter } from "./ErrorFormatter";
+import { IllegalStateError } from "../errors/IllegalStateError";
 
 @Catch()
 export class GlobalException implements ExceptionFilter {
@@ -18,21 +19,41 @@ export class GlobalException implements ExceptionFilter {
   ) {}
   catch(exception: unknown, host: ArgumentsHost) {
     const context = host.switchToHttp();
+    try {
+      if (exception instanceof HttpError) {
+        return this.sendResponse(context, {
+          status: exception.httpCode,
+          body: (exception as any).toJSON(),
+        });
+      }
 
-    if (exception instanceof HttpError) {
-      return this.sendResponse(context, {
-        status: exception.httpCode,
-        body: (exception as any).toJSON(),
-      });
-    }
+      if (
+        (exception as HttpException).getResponse() &&
+        (exception as HttpException).getStatus()
+      ) {
+        return this.sendResponse(context, {
+          status: (exception as HttpException).getStatus(),
+          body: this.errorFormatter.execute(exception),
+        });
+      }
+    } catch (err) {
+      const errorResponse = {
+        status: 500,
+        error: "Internal Server Error",
+        message: "An unexpected error occurred.",
+        debug: {
+          errorMessage: err.message,
+          stack: err.stack,
+          originalException: {
+            message: (exception as any).message,
+            stack: (exception as any).stack,
+          },
+        },
+      };
 
-    if (
-      (exception as HttpException).getResponse() &&
-      (exception as HttpException).getStatus()
-    ) {
       return this.sendResponse(context, {
-        status: (exception as HttpException).getStatus(),
-        body: this.errorFormatter.execute(exception),
+        status: 500,
+        body: errorResponse,
       });
     }
   }

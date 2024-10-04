@@ -1,14 +1,13 @@
 import { DB, User } from "../../../db/types";
 import { KyselyReaderService } from "../../../infrastructure/KyselyReaderService.provider";
 import { EmailExistsError } from "../../../pkgs/errors/EmailExistsError";
-import { UserCreatePayloadDto } from "../dtos/UserCreatePayloadDto";
 import { v4 as uuidv4 } from "uuid";
-import { PasswordHasher } from "./PasswordHasher";
-import * as jwt from "jsonwebtoken";
+import { PasswordHasher } from "../actions/PasswordHasher";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
 import { generateAccessToken, TokenUser } from "../../TokenUser";
 import { AppConfigsEnvironment } from "../../../pkgs/config/AppConfigsEnvironment";
+import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
 
 @Injectable()
 export class UserRegisterAction {
@@ -49,6 +48,7 @@ export class UserRegisterAction {
     const tokenUser: TokenUser = {
       id: createdUser.id,
       emailAddressVerified: createdUser.emailAddressVerified,
+      emailAddress: createdUser.emailAddress,
       administrator: createdUser.administrator,
       enabled: createdUser.enabled,
     };
@@ -96,20 +96,5 @@ export class UserRegisterAction {
       .executeTakeFirstOrThrow();
 
     return user;
-  }
-
-  generateAccessToken(
-    tokenUser: any,
-    jwtSecret: string,
-    expiresIn: string,
-  ): { accessToken: string } {
-    const token = jwt.sign(tokenUser, jwtSecret, {
-      algorithm: "HS256",
-      header: {
-        authorization: true,
-      } as any,
-      expiresIn,
-    });
-    return { accessToken: token };
   }
 }

@@ -8,12 +8,16 @@
     - handle exception filter, validation (done)
 - fixing env variables return underfined (done)
 - implement reset user after each test (done)
-
+- comment JwtStrategy in infrastructure module then get error -> try to response error to client (done)
 - changing current using env to: (this.appConfigs as AppConfigsEnvironment).jwtSecret... (done)
-- impplement throw error when still have data left after each test 
-- investigate whether database connection is closed after spect tests
-- investigate connect staging database in vercel
-- using passport user
+
+- using passport user (doing)
+  - jwt local to use for specific routes 
+  - jwt auth guard use for whole app
+
+- impplement throw error when still have data left after each test (investigating)
+- investigate whether database connection is closed after spect tests (investigating)
+- investigate connect staging database in vercel (maybe consider using free aws)
 - implement refresh token
 
 - implement sign up flow (using JWT)

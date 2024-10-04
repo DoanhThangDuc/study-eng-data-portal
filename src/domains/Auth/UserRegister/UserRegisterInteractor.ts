@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
-import { UserCreatePayloadDto } from "./dtos/UserCreatePayloadDto";
-import { UserRegisterAction } from "./actions/UserRegisterAction";
-import { InteractorContext } from "../InteractorContext";
+import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
+import { UserRegisterAction } from "./UserRegisterAction";
+import { InteractorContext } from "../../InteractorContext";
 
 @Injectable()
 export class UserRegisterInteractor {

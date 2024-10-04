@@ -1,4 +1,4 @@
-import { ColumnType, Insertable, Updateable } from "kysely";
+import { ColumnType } from "kysely";
 
 export type Generated<T> =
   T extends ColumnType<infer S, infer I, infer U>

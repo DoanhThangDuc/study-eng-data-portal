@@ -6,6 +6,8 @@ import configuration from "../pkgs/config/configuration";
 import { JwtStrategy } from "./JwtStrategy.provider";
 import { appConfigs } from "../pkgs/config/AppConfigs";
 import { AppConfigsEnvironment } from "../pkgs/config/AppConfigsEnvironment";
+import { JwtModule } from "@nestjs/jwt";
+import { PassportModule } from "@nestjs/passport";
 
 @Module({
   controllers: [],
@@ -15,6 +17,11 @@ import { AppConfigsEnvironment } from "../pkgs/config/AppConfigsEnvironment";
       isGlobal: true,
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env.staging"],
     }),
+    PassportModule,
+    // JwtModule.register({
+    //   secret: appConfigs.jwtSecret,
+    //   signOptions: { expiresIn: appConfigs.expiresIn },
+    // }),
   ],
   providers: [
     {
@@ -30,6 +37,11 @@ import { AppConfigsEnvironment } from "../pkgs/config/AppConfigsEnvironment";
     },
     JwtStrategy,
   ],
-  exports: [KyselyReaderService, AppConfigsEnvironment],
+  exports: [
+    KyselyReaderService,
+    AppConfigsEnvironment,
+    // JwtModule,
+    PassportModule,
+  ],
 })
 export class InfrastructureModule {}

@@ -1,8 +1,10 @@
 import * as jwt from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 
 export type TokenUser = {
   readonly id: string;
   readonly emailAddressVerified: boolean;
+  readonly emailAddress: string;
   readonly administrator: boolean;
   readonly enabled: boolean;
 };
@@ -41,4 +43,16 @@ export function generateUserRefreshToken(
   });
 
   return token;
+}
+
+export async function validateAccessToken(
+  token: string,
+): Promise<JwtPayload | null> {
+  try {
+    const decoded = jwt.verify(token, this.JWT_SECRET) as JwtPayload;
+
+    return decoded;
+  } catch (err) {
+    throw new Error(err);
+  }
 }
