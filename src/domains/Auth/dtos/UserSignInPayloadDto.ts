@@ -7,5 +7,5 @@ export class UserSignInPayloadDto {
 
   @IsNotEmpty()
   @IsHash("sha256")
-  preHashedPassword!: string;
+  password!: string;
 }

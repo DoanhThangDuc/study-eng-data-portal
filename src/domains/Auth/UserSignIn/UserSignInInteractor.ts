@@ -10,14 +10,10 @@ export class UserSignInInteractor {
   constructor(
     private readonly userSignInAction: UserSignInAction,
     private readonly kyselyReaderService: KyselyReaderService<DB>,
-    // private readonly jwtService: JwtService,
   ) {}
 
   async execute(payload: UserSignInPayloadDto) {
-    const user = await this.userSignInAction.validateUser(
-      this.kyselyReaderService,
-      payload,
-    );
+    const user = await this.userSignInAction.mockValidateUser(payload);
 
     if (!user) {
       throw new UnauthorizedException("User not found!");

@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Req,
   UseGuards,
@@ -11,7 +12,7 @@ import { UserRegisterInteractor } from "../domains/Auth/UserRegister/UserRegiste
 import { UserSignInPayloadDto } from "../domains/Auth/dtos/UserSignInPayloadDto";
 import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInteractor";
 import { JwtAuthGuard } from "../infrastructure/JwtAuthGuard.provider";
-import { AuthGuard } from "@nestjs/passport";
+import { Request } from "express";
 
 @Controller("/v1")
 export class AuthController {
@@ -29,8 +30,13 @@ export class AuthController {
   }
 
   @Post("/users/login")
-  @UseGuards(JwtAuthGuard)
   userSignIn(@Body(new ValidationPipe()) payload: UserSignInPayloadDto) {
     return this.userSignInInteractor.execute(payload);
+  }
+
+  @Get("/status")
+  @UseGuards(JwtAuthGuard)
+  getStatus(@Req() request: Request) {
+    return "OK";
   }
 }

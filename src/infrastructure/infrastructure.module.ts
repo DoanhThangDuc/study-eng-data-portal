@@ -18,10 +18,10 @@ import { PassportModule } from "@nestjs/passport";
       envFilePath: [`.env.${process.env.NODE_ENV}`, ".env.staging"],
     }),
     PassportModule,
-    // JwtModule.register({
-    //   secret: appConfigs.jwtSecret,
-    //   signOptions: { expiresIn: appConfigs.expiresIn },
-    // }),
+    JwtModule.register({
+      secret: appConfigs.jwtSecret,
+      signOptions: { expiresIn: appConfigs.expiresIn },
+    }),
   ],
   providers: [
     {
@@ -40,7 +40,7 @@ import { PassportModule } from "@nestjs/passport";
   exports: [
     KyselyReaderService,
     AppConfigsEnvironment,
-    // JwtModule,
+    JwtModule,
     PassportModule,
   ],
 })
