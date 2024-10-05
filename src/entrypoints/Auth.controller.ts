@@ -22,7 +22,7 @@ export class AuthController {
     private userSignInInteractor: UserSignInInteractor,
   ) {}
 
-  @Post("/users/signup")
+  @Post("/auth/signup")
   userRegister(
     @Body(new ValidationPipe()) payload: UserCreatePayloadDto,
     @Req() request: AppRequest,
@@ -30,22 +30,22 @@ export class AuthController {
     return this.userRegisterInteractor.execute(request, payload);
   }
 
-  @Post("/users/login")
+  @Post("/auth/signin")
   async userSignIn(
     @Req() request: AppRequest,
-    @Res() res: Response,
+    @Res() response: Response,
     @Body(new ValidationPipe()) payload: UserSignInPayloadDto,
   ) {
     const { accessToken, refreshToken, userResponse } =
       await this.userSignInInteractor.execute(request, payload);
 
-    res.setHeader("Authorization", accessToken);
-    res.setHeader("RefreshToken", refreshToken);
+    response.setHeader("Authorization", accessToken);
+    response.setHeader("RefreshToken", refreshToken);
 
-    return res.status(200).json(userResponse);
+    return response.status(200).json(userResponse);
   }
 
-  @Get("/status")
+  @Get("/auth/status")
   getStatus(@Req() request: AppRequest) {
     if (!request.user) {
       throw new IllegalStateError("User not logged");

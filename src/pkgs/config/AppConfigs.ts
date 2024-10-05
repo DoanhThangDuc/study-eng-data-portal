@@ -8,8 +8,10 @@ export interface AppConfigs {
   pgPort: number;
   pgUser: string;
   pgPass: string;
-  jwtSecret: string;
-  expiresIn: string;
+  jwtAccessSecret: string;
+  jwtRefreshSecret: string;
+  accessTokenExpiresIn: string;
+  refreshTokenExpiresIn: string;
   hashSaltLogRounds: number;
 }
 

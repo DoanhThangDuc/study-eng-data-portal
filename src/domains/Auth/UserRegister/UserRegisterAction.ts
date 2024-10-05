@@ -7,14 +7,14 @@ import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
 import { TokenUser } from "../../TokenUser";
 import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
-import { JwtService } from "@nestjs/jwt";
 import { InteractorContext } from "../../InteractorContext";
+import { TokenGenerator } from "../actions/TokenGenerator";
 
 @Injectable()
 export class UserRegisterAction {
   constructor(
     private readonly kyselyReaderService: KyselyReaderService<DB>,
-    private readonly jwtService: JwtService,
+    private readonly tokenGenerator: TokenGenerator,
     private readonly passwordHasher: PasswordHasher,
   ) {}
   async execute(
@@ -65,12 +65,15 @@ export class UserRegisterAction {
       enabled: createdUser.enabled,
     };
 
-    const accessToken = this.jwtService.sign(tokenUser);
+    const [accessToken, refreshToken] = await Promise.all([
+      this.tokenGenerator.generateAccessToken(tokenUser),
+      this.tokenGenerator.generateRefreshToken({ userId: tokenUser.id }),
+    ]);
 
     return {
       userResponse: tokenUser,
       accessToken,
-      refreshToken: "string",
+      refreshToken,
     };
   }
 

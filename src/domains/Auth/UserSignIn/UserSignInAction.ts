@@ -35,7 +35,7 @@ export class UserSignInAction {
 
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenGenerator.generateAccessToken(userResponse),
-      this.tokenGenerator.generateAccessToken(userResponse),
+      this.tokenGenerator.generateRefreshToken({ userId: userResponse.id }),
     ]);
 
     context.user = userResponse;

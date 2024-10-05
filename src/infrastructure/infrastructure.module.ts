@@ -21,8 +21,8 @@ import { JwtAuthGuard } from "./JwtAuthGuard.provider";
     }),
     PassportModule,
     JwtModule.register({
-      secret: appConfigs.jwtSecret,
-      signOptions: { expiresIn: appConfigs.expiresIn },
+      secret: appConfigs.jwtAccessSecret,
+      signOptions: { expiresIn: appConfigs.accessTokenExpiresIn },
     }),
   ],
   providers: [

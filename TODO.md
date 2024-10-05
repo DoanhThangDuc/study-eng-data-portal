@@ -19,7 +19,7 @@
 - implement sign in flow (using JWT) (done)
 
 - implement testing sigin flow 
-- implement refresh token
+- implement refresh token (done)
 
 - impplement throw error when still have data left after each test (investigating)
 - investigate whether database connection is closed after spect tests (investigating)

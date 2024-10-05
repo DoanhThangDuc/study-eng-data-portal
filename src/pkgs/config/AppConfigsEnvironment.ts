@@ -32,10 +32,16 @@ export class AppConfigsEnvironment implements AppConfigs {
   get hashSaltLogRounds(): number {
     return Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10;
   }
-  get jwtSecret(): string {
-    return process.env.JWT_ACCESSTOKEN_SECRET_SECRET || "secret";
+  get jwtAccessSecret(): string {
+    return process.env.JWT_ACCESSTOKEN_SECRET || "secret";
   }
-  get expiresIn(): string {
-    return process.env.TOKEN_EXPIRATION_TIME || "1h";
+  get jwtRefreshSecret(): string {
+    return process.env.JWT_REFRESHTOKEN_SECRET || "secret";
+  }
+  get accessTokenExpiresIn(): string {
+    return process.env.ACCESSTOKEN_TOKEN_EXPIRATION_TIME || "1h";
+  }
+  get refreshTokenExpiresIn(): string {
+    return process.env.REFRESHTOKEN_TOKEN_EXPIRATION_TIME || "1h";
   }
 }

@@ -9,7 +9,6 @@ import { HttpAdapterHost } from "@nestjs/core";
 import { Response } from "express";
 import { HttpError } from "routing-controllers";
 import { ErrorFormatter } from "./ErrorFormatter";
-import { IllegalStateError } from "../errors/IllegalStateError";
 
 @Catch()
 export class GlobalException implements ExceptionFilter {
