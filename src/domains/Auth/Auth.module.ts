@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
 import { AuthController } from "../../entrypoints/Auth.controller";
-import { UserRegisterInteractor } from "./UserRegister/UserRegisterInteractor";
-import { UserRegisterAction } from "./UserRegister/UserRegisterAction";
+import { UserSignUpInteractor } from "./UserSignUp/UserSignUpInteractor";
+import { UserSignUpAction } from "./UserSignUp/UserSignUpAction";
 import { InfrastructureModule } from "../../infrastructure/infrastructure.module";
 import { UserSignInAction } from "./UserSignIn/UserSignInAction";
 import { UserSignInInteractor } from "./UserSignIn/UserSignInInteractor";
@@ -13,8 +13,8 @@ import { TokenGenerator } from "./actions/TokenGenerator";
   imports: [InfrastructureModule, PassportModule],
   controllers: [AuthController],
   providers: [
-    UserRegisterInteractor,
-    UserRegisterAction,
+    UserSignUpInteractor,
+    UserSignUpAction,
     UserSignInInteractor,
     UserSignInAction,
     PasswordHasher,

@@ -7,7 +7,7 @@ import { DB } from "../../../src/db/types";
 import { KyselyReaderService } from "../../../src/infrastructure/KyselyReaderService.provider";
 import { deleteUserByEmail } from "../../commonTests";
 
-describe("POST /v1/users", () => {
+describe("POST /v1/auth/signin", () => {
   let request: TestAgent<Test>;
   let keysely: KyselyReaderService<DB>;
   const seeUserEmail: string[] = [];
@@ -23,7 +23,7 @@ describe("POST /v1/users", () => {
 
   it("should validate user payload correctly", async () => {
     // act - calling endpoint user sign up
-    const response = await request.post("/v1/users");
+    const response = await request.post("/v1/auth/signup");
 
     // assert - should validate user payload
     expect(pick(response, ["status", "body"])).toMatchObject({
@@ -51,7 +51,7 @@ describe("POST /v1/users", () => {
     // arrange - calling endpoint user sign up
     const userEmail = "user@example.com";
     await request
-      .post("/v1/users")
+      .post("/v1/auth/signup")
       .send({
         emailAddress: "user@example.com",
         firstName: "John",
@@ -64,7 +64,7 @@ describe("POST /v1/users", () => {
     seeUserEmail.push(userEmail);
 
     // act - create a new user with existing email
-    const responseExistingEmail = await request.post("/v1/users").send({
+    const responseExistingEmail = await request.post("/v1/auth/signup").send({
       emailAddress: "user@example.com",
       firstName: "John",
       lastName: "Doe",
@@ -84,7 +84,7 @@ describe("POST /v1/users", () => {
     });
   });
 
-  it("should register user successfully", async () => {
+  it("should sign up user successfully", async () => {
     // arrange user payload
     const userEmail = "user@example.com";
 
@@ -99,7 +99,7 @@ describe("POST /v1/users", () => {
 
     // act - create a new user with existing email
     const response = await request
-      .post("/v1/users")
+      .post("/v1/auth/signup")
       .send(userCreatePayload)
       .expect(HttpStatus.CREATED);
 

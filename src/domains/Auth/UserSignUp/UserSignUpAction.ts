@@ -6,12 +6,12 @@ import { PasswordHasher } from "../actions/PasswordHasher";
 import { Injectable } from "@nestjs/common";
 import { IllegalStateError } from "../../../pkgs/errors/IllegalStateError";
 import { TokenUser } from "../../TokenUser";
-import { UserCreatePayloadDto } from "./UserCreatePayloadDto";
+import { UserSignUpPayloadDto } from "./UserSignUpPayloadDto";
 import { InteractorContext } from "../../InteractorContext";
 import { TokenGenerator } from "../actions/TokenGenerator";
 
 @Injectable()
-export class UserRegisterAction {
+export class UserSignUpAction {
   constructor(
     private readonly kyselyReaderService: KyselyReaderService<DB>,
     private readonly tokenGenerator: TokenGenerator,
@@ -19,7 +19,7 @@ export class UserRegisterAction {
   ) {}
   async execute(
     context: InteractorContext,
-    payload: UserCreatePayloadDto,
+    payload: UserSignUpPayloadDto,
   ): Promise<{
     accessToken: string;
     refreshToken: string;

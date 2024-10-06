@@ -7,8 +7,8 @@ import {
   Res,
   ValidationPipe,
 } from "@nestjs/common";
-import { UserCreatePayloadDto } from "../domains/Auth/UserRegister/UserCreatePayloadDto";
-import { UserRegisterInteractor } from "../domains/Auth/UserRegister/UserRegisterInteractor";
+import { UserSignUpPayloadDto } from "../domains/Auth/UserSignUp/UserSignUpPayloadDto";
+import { UserSignUpInteractor } from "../domains/Auth/UserSignUp/UserSignUpInteractor";
 import { UserSignInPayloadDto } from "../domains/Auth/dtos/UserSignInPayloadDto";
 import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInteractor";
 import { AppRequest } from "../domains/InteractorContext";
@@ -18,16 +18,16 @@ import { Response } from "express";
 @Controller("/v1")
 export class AuthController {
   constructor(
-    private userRegisterInteractor: UserRegisterInteractor,
+    private userSignUpInteractor: UserSignUpInteractor,
     private userSignInInteractor: UserSignInInteractor,
   ) {}
 
   @Post("/auth/signup")
-  userRegister(
-    @Body(new ValidationPipe()) payload: UserCreatePayloadDto,
+  userSignUp(
+    @Body(new ValidationPipe()) payload: UserSignUpPayloadDto,
     @Req() request: AppRequest,
   ) {
-    return this.userRegisterInteractor.execute(request, payload);
+    return this.userSignUpInteractor.execute(request, payload);
   }
 
   @Post("/auth/signin")

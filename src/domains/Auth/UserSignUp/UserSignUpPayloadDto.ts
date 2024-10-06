@@ -1,6 +1,6 @@
 import { IsEmail, IsHash, IsNotEmpty, IsString } from "class-validator";
 
-export class UserCreatePayloadDto {
+export class UserSignUpPayloadDto {
   @IsNotEmpty()
   @IsEmail()
   emailAddress: string;

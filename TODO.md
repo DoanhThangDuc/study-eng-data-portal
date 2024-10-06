@@ -18,7 +18,7 @@
 - implement sign up flow (using JWT) (done)
 - implement sign in flow (using JWT) (done)
 
-- implement testing sigin flow 
+- implement testing sigin flow (doing)
 - implement refresh token (done)
 
 - impplement throw error when still have data left after each test (investigating)
