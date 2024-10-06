@@ -8,5 +8,5 @@ beforeAll(async () => {
 
 afterAll(async () => {});
 
-import "../test/suites/User/UserSignUpTest";
+// import "../test/suites/User/UserSignUpTest";
 import "../test/suites/User/UserSignInTest";

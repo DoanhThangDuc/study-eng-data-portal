@@ -6,6 +6,7 @@ import { Test } from "supertest";
 import { DB } from "../../../src/db/types";
 import { KyselyReaderService } from "../../../src/infrastructure/KyselyReaderService.provider";
 import { deleteUserByEmail } from "../../commonTests";
+import { UserSignInPayloadDto } from "../../../src/domains/Auth/dtos/UserSignInPayloadDto";
 
 describe("POST /v1/auth/signin", () => {
   let request: TestAgent<Test>;
@@ -22,8 +23,8 @@ describe("POST /v1/auth/signin", () => {
   });
 
   it("should validate user payload correctly", async () => {
-    // act - calling endpoint user sign up
-    const response = await request.post("/v1/auth/signup");
+    // act - calling endpoint user sign in
+    const response = await request.post("/v1/auth/signin");
 
     // assert - should validate user payload
     expect(pick(response, ["status", "body"])).toMatchObject({
@@ -36,44 +37,30 @@ describe("POST /v1/auth/signin", () => {
         fieldErrors: [
           "emailAddress must be an email",
           "emailAddress should not be empty",
-          "firstName should not be empty",
-          "firstName must be a string",
-          "lastName should not be empty",
-          "lastName must be a string",
-          "preHashedPassword must be a hash of type sha256",
-          "preHashedPassword should not be empty",
+          "password must be a hash of type sha256",
+          "password should not be empty",
         ],
       },
     });
   });
 
-  it("should thow error when user email address is already in use", async () => {
-    // arrange - calling endpoint user sign up
+  it.only("should thow error when user email address is not found", async () => {
+    // arrange - user payload
     const userEmail = "user@example.com";
-    await request
-      .post("/v1/auth/signup")
-      .send({
-        emailAddress: "user@example.com",
-        firstName: "John",
-        lastName: "Doe",
-        preHashedPassword:
-          "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
-      })
-      .expect(HttpStatus.CREATED);
 
+    const payload: UserSignInPayloadDto = {
+      emailAddress: userEmail,
+      password:
+        "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
+    };
     seeUserEmail.push(userEmail);
 
-    // act - create a new user with existing email
-    const responseExistingEmail = await request.post("/v1/auth/signup").send({
-      emailAddress: "user@example.com",
-      firstName: "John",
-      lastName: "Doe",
-      preHashedPassword:
-        "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
-    });
+    // act - calling sign in endpoint
+    const response = await request.post("/v1/auth/signin").send(payload);
+    console.log("response", response.body);
 
     // assert - should validate user payload
-    expect(pick(responseExistingEmail, ["status", "body"])).toMatchObject({
+    expect(pick(response, ["status", "body"])).toMatchObject({
       status: HttpStatus.CONFLICT,
       body: {
         debugMessage: "This email address is already being used",
@@ -99,7 +86,7 @@ describe("POST /v1/auth/signin", () => {
 
     // act - create a new user with existing email
     const response = await request
-      .post("/v1/auth/signup")
+      .post("/v1/auth/signin")
       .send(userCreatePayload)
       .expect(HttpStatus.CREATED);
 

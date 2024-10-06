@@ -19,6 +19,8 @@ export class GlobalException implements ExceptionFilter {
   catch(exception: unknown, host: ArgumentsHost) {
     const context = host.switchToHttp();
     try {
+      console.log("exception:>>", exception);
+
       if (exception instanceof HttpError) {
         return this.sendResponse(context, {
           status: exception.httpCode,

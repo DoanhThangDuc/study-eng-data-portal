@@ -21,6 +21,53 @@ describe("POST /v1/auth/signup", () => {
     await deleteUserByEmail(keysely, seeUserEmail);
   });
 
+  it("should throw error when user upgrade not anonymous user", async () => {
+    // arrange User1
+    const userEmail1 = "user@example.com";
+
+    const userCreatePayload = {
+      emailAddress: "user@example.com",
+      firstName: "John",
+      lastName: "Doe",
+      preHashedPassword:
+        "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
+    };
+    seeUserEmail.push(userEmail1);
+
+    const responseUser1 = await request
+      .post("/v1/auth/signup")
+      .send(userCreatePayload)
+      .expect(HttpStatus.CREATED);
+
+    const { accessToken: accessTokenUser1 } = responseUser1.body;
+
+    // arrange User2
+    const userEmail2 = "user2@example.com";
+
+    const userCreatePayload2 = {
+      emailAddress: userEmail2,
+      firstName: "John2",
+      lastName: "Doe2",
+      preHashedPassword:
+        "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
+    };
+    seeUserEmail.push(userEmail2);
+
+    // act - calling create another User2 with User1 token
+    const responseUser2 = await request
+      .post("/v1/auth/signup")
+      .set("Authorization", `Bearer ${accessTokenUser1}`)
+      .send(userCreatePayload2);
+
+    // assert - throw error
+    expect(responseUser2.body).toMatchObject({
+      type: "IllegalState",
+      options: {},
+      status: "ERROR",
+      debugMessage: "Can't upgrade not anonymous user",
+    });
+  });
+
   it("should validate user payload correctly", async () => {
     // act - calling endpoint user sign up
     const response = await request.post("/v1/auth/signup");

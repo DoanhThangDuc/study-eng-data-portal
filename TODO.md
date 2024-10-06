@@ -18,8 +18,9 @@
 - implement sign up flow (using JWT) (done)
 - implement sign in flow (using JWT) (done)
 
-- implement testing sigin flow (doing)
 - implement refresh token (done)
+- implement testing sigin flow (doing)
+- check error when calling endpoint sign in postman
 
 - impplement throw error when still have data left after each test (investigating)
 - investigate whether database connection is closed after spect tests (investigating)
