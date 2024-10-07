@@ -119,7 +119,7 @@ describe("POST /v1/auth/signup", () => {
         "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
     });
 
-    // assert - should validate user payload
+    // assert - thow error user email address is already in use
     expect(pick(responseExistingEmail, ["status", "body"])).toMatchObject({
       status: HttpStatus.CONFLICT,
       body: {
@@ -150,7 +150,7 @@ describe("POST /v1/auth/signup", () => {
       .send(userCreatePayload)
       .expect(HttpStatus.CREATED);
 
-    // assert - should validate user payload
+    // assert - register user successfully
     expect(pick(response, ["status", "body"])).toMatchObject({
       status: HttpStatus.CREATED,
       body: {

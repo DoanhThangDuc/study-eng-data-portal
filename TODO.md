@@ -21,6 +21,7 @@
 - implement refresh token (done)
 - check error when calling endpoint sign in postman (done)
 
+- implement connect Kysely DB 
 - implement testing sigin flow (doing)
 
 - impplement throw error when still have data left after each test (investigating)

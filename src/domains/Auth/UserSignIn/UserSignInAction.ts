@@ -28,21 +28,19 @@ export class UserSignInAction {
     if (!userResponse) {
       throw new UnauthorizedException("User not found!");
     }
+    const { passwordHash, ...user } = userResponse;
 
-    await this.passwordHasher.comparePassword(
-      payload.password,
-      userResponse.passwordHash,
-    );
+    await this.passwordHasher.comparePassword(payload.password, passwordHash);
 
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenGenerator.generateAccessToken(userResponse),
       this.tokenGenerator.generateRefreshToken({ userId: userResponse.id }),
     ]);
 
-    context.user = userResponse;
+    context.user = user;
 
     return {
-      userResponse: userResponse,
+      userResponse: user,
       accessToken,
       refreshToken,
     };
@@ -62,7 +60,6 @@ export class UserSignInAction {
       .select("User.emailAddressVerified")
       .select("User.administrator")
       .select("User.enabled")
-      .select("User.passwordHash")
       .select("User.passwordHash")
       .where("User.emailAddress", "=", emailAddress.toLowerCase())
       .execute();

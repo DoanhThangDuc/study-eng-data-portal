@@ -29,7 +29,7 @@ export class PasswordHasher {
     const compareResult = await bcrypt.compare(preHashedPassword, hash);
 
     if (!compareResult) {
-      throw new InvalidCredentialsError();
+      throw new InvalidCredentialsError("Passwords do not match");
     }
   }
 }

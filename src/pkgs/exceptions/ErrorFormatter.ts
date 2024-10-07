@@ -15,8 +15,10 @@ export class ErrorFormatter {
     }
 
     return {
-      status: exception.getStatus(),
-      body: exception.getResponse(),
+      debugMessage: exception.getResponse().message,
+      options: exception.stack,
+      status: "ERROR",
+      type: exception.getResponse().error,
     };
   }
 }
