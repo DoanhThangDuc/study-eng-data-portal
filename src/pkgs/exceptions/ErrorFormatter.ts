@@ -14,8 +14,6 @@ export class ErrorFormatter {
       };
     }
 
-    console.log("exception.getStatus():>>", exception.getStatus());
-
     return {
       status: exception.getStatus(),
       body: exception.getResponse(),

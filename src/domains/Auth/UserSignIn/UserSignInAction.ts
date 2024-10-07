@@ -23,15 +23,16 @@ export class UserSignInAction {
     refreshToken: string;
     userResponse: TokenUser;
   }> {
-    const { passwordHash, ...userResponse } = await this.getUserResponse(
-      payload.emailAddress,
-    );
+    const userResponse = await this.getUserResponse(payload.emailAddress);
 
     if (!userResponse) {
       throw new UnauthorizedException("User not found!");
     }
 
-    await this.passwordHasher.comparePassword(payload.password, passwordHash);
+    await this.passwordHasher.comparePassword(
+      payload.password,
+      userResponse.passwordHash,
+    );
 
     const [accessToken, refreshToken] = await Promise.all([
       this.tokenGenerator.generateAccessToken(userResponse),

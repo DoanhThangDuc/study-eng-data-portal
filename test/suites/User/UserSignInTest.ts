@@ -57,7 +57,6 @@ describe("POST /v1/auth/signin", () => {
 
     // act - calling sign in endpoint
     const response = await request.post("/v1/auth/signin").send(payload);
-    console.log("response", response.body);
 
     // assert - should validate user payload
     expect(pick(response, ["status", "body"])).toMatchObject({
