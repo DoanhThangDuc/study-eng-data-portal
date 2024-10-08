@@ -9,16 +9,16 @@ import { deleteUserByEmail } from "../../commonTests";
 
 describe("POST /v1/auth/signup", () => {
   let request: TestAgent<Test>;
-  let keysely: KyselyReaderService<DB>;
+  let kysely: KyselyReaderService<DB>;
   const seeUserEmail: string[] = [];
 
   beforeEach(async () => {
     const appContext = getTestUserModule();
-    ({ request, keysely } = appContext);
+    ({ request, kysely } = appContext);
   });
 
   afterEach(async () => {
-    await deleteUserByEmail(keysely, seeUserEmail);
+    await deleteUserByEmail(kysely, seeUserEmail);
   });
 
   it("should throw error when user upgrade not anonymous user", async () => {

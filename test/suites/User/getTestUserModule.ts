@@ -13,7 +13,7 @@ export function getTestUserModule() {
   return {
     app,
     request: supertest(app.getHttpServer()),
-    keysely: app.get<KyselyReaderService<DB>>(KyselyReaderService),
+    kysely: app.get<KyselyReaderService<DB>>(KyselyReaderService),
   };
 }
 export async function setTestUserModule() {

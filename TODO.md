@@ -21,19 +21,14 @@
 - implement refresh token (done)
 - check error when calling endpoint sign in postman (done)
 
-- implement connect Kysely DB 
-- check if there are any credentials keys, just remove and make the project public 
-
-- implement testing sigin flow (doing)
+- implement global catch custom exception (implement in testing also) (done)
+- implement connect Kysely DB in test (done)
+- check if there are any credentials keys, just remove and make the project public (done)
+- implement testing sigin flow (done)
+- investigate whether database connection is closed after spect tests (done)
 
 - impplement throw error when still have data left after each test (investigating)
-- investigate whether database connection is closed after spect tests (investigating)
 - investigate connect staging database in vercel (maybe consider using free aws)
-
-- implement refresh token
-
-- implement testing flow instance (doing)
-- implement global catch custom exception (implement in testing also)
 
 - will learn about mechanism for unique vanity name and user generate id
 - leaning about user-pass in postgres
