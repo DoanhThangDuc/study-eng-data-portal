@@ -1,8 +1,8 @@
 {
   "name": "study-eng",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
+  "description": "A learning project designed to make studying English easier and more accessible for everyone.",
+  "author": "doanhthangduc2802@gmail.com",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {

@@ -22,6 +22,8 @@
 - check error when calling endpoint sign in postman (done)
 
 - implement connect Kysely DB 
+- check if there are any credentials keys, just remove and make the project public 
+
 - implement testing sigin flow (doing)
 
 - impplement throw error when still have data left after each test (investigating)
