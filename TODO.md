@@ -27,16 +27,16 @@
 - implement testing sigin flow (done)
 - investigate whether database connection is closed after spect tests (done)
 
-- implement supabase for staging (doing)
-- implement commit rules
+- implement supabase for staging (done)
 - create endpoint refresh token 
 - create endpoint reset password 
 - investigate sending email with Mailchimp
 - create endpoint delete account
 - investigate api documentation
 
+- implement commit rules
 - impplement throw error when still have data left after each test (investigating)
-- investigate connect staging database in vercel (maybe consider using free aws)
+- investigate connect push image to aws free
 
 - will learn about mechanism for unique vanity name and user generate id
 - leaning about user-pass in postgres

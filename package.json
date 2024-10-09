@@ -54,8 +54,7 @@
     "reflect-metadata": "^0.2.0",
     "routing-controllers": "^0.10.4",
     "rxjs": "^7.8.1",
-    "uuid": "^10.0.0",
-    "vercel": "^37.4.0"
+    "uuid": "^10.0.0"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
