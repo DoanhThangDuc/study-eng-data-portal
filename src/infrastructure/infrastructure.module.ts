@@ -17,7 +17,7 @@ import { JwtAuthGuard } from "./JwtAuthGuard.provider";
     ConfigModule.forRoot({
       load: [configuration],
       isGlobal: true,
-      envFilePath: [`.env.${process.env.NODE_ENV}`, ".env.staging"],
+      envFilePath: [`.env.${process.env.NODE_ENV}`, ".env.local"],
     }),
     PassportModule,
     JwtModule.register({

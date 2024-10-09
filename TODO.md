@@ -27,6 +27,13 @@
 - implement testing sigin flow (done)
 - investigate whether database connection is closed after spect tests (done)
 
+- implement supabase for staging (doing)
+- create endpoint refresh token 
+- create endpoint reset password 
+- investigate sending email with Mailchimp
+- create endpoint delete account
+- investigate api documentation
+
 - impplement throw error when still have data left after each test (investigating)
 - investigate connect staging database in vercel (maybe consider using free aws)
 

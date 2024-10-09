@@ -14,7 +14,9 @@ async function bootstrap() {
   app.useGlobalFilters(new GlobalException(httpAdapter, errorFormatter));
 
   await app.listen(appConfigs.port, () => {
-    console.log(`The app is running on port ${appConfigs.port}`);
+    console.log(
+      `The app is running on port: ${appConfigs.port}\nNODE_ENV: ${process.env.NODE_ENV}`,
+    );
   });
 }
 
