@@ -40,7 +40,7 @@ export async function startApp(): Promise<{
   const client = new pg.Client({
     host: appConfigs.pgHost,
     port: appConfigs.pgPort,
-    database: "postgres",
+    database: appConfigs.pgClient,
     user: appConfigs.pgUser,
     password: appConfigs.pgPass,
   });

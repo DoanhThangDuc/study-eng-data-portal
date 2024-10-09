@@ -1,36 +1,34 @@
 import type { Knex } from "knex";
+import { appConfigs } from "./src/pkgs/config/AppConfigs";
 
+const baseConfig: Knex.Config = {
+  client: appConfigs.pgClient,
+  connection: {
+    host: appConfigs.pgHost,
+    port: appConfigs.pgPort,
+    user: appConfigs.pgUser,
+    password: appConfigs.pgPass,
+    database: appConfigs.pgDbName,
+  },
+  migrations: {
+    tableName: "knex_migrations",
+    directory: "./src/knexMigrations",
+  },
+};
+
+appConfigs.setup();
 const config: { [key: string]: Knex.Config } = {
   development: {
-    client: "postgresql",
-    connection: {
-      host: "localhost",
-      port: 5432,
-      user: "postgres",
-      password: "Password",
-      database: "study_eng",
-    },
-    migrations: {
-      tableName: "knex_migrations",
-      directory: "./src/knexMigrations",
-    },
+    ...baseConfig,
   },
 
-  // staging: {
-  //   client: "postgresql",
-  //   connection: {
-  //     database: "my_db",
-  //     user: "username",
-  //     password: "password",
-  //   },
-  //   pool: {
-  //     min: 2,
-  //     max: 10,
-  //   },
-  //   migrations: {
-  //     tableName: "knex_migrations",
-  //   },
-  // },
+  staging: {
+    ...baseConfig,
+    pool: {
+      min: appConfigs.minPool,
+      max: appConfigs.maxPool,
+    },
+  },
 
   // production: {
   //   client: "postgresql",

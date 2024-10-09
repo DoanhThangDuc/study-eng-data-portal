@@ -3,7 +3,10 @@ import { AppConfigsEnvironment } from "./AppConfigsEnvironment";
 export interface AppConfigs {
   setup: () => void;
   port: number;
+  pgClient: string;
   pgDbName: string;
+  maxPool: number;
+  minPool: number;
   pgHost: string;
   pgPort: number;
   pgUser: string;

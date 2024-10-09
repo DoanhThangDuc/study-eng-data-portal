@@ -28,6 +28,7 @@
 - investigate whether database connection is closed after spect tests (done)
 
 - implement supabase for staging (doing)
+- implement commit rules
 - create endpoint refresh token 
 - create endpoint reset password 
 - investigate sending email with Mailchimp

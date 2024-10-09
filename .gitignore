@@ -3,11 +3,7 @@
 /node_modules
 /build
 
-# vercel
-./vercel
-
 # .env
-.env.local
 .env.staging
 .env.production
 

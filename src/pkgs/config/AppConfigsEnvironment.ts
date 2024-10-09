@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 export class AppConfigsEnvironment implements AppConfigs {
   setup() {
-    dotenv.config();
+    dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
   }
 
   get port(): number {
@@ -14,8 +14,19 @@ export class AppConfigsEnvironment implements AppConfigs {
     return process.env.DATABASE_HOST || "localhost";
   }
 
+  get maxPool(): number {
+    return Number.parseInt(process.env.MAX_POOL) || 10;
+  }
+
+  get minPool(): number {
+    return Number.parseInt(process.env.MIN_POOL) || 2;
+  }
+
   get pgPort(): number {
     return Number.parseInt(process.env.DATABASE_PORT) || 5432;
+  }
+  get pgClient(): string {
+    return process.env.DATABASE_CLIENT || "postgres";
   }
 
   get pgDbName(): string {
