@@ -1,8 +1,12 @@
 export interface ConfigurationInterface {
-  port: number;
-  hashSaltLogRounds: number;
-  jwtSecret: string;
-  expiresIn: string;
+  appPort: number;
+  jwt: {
+    hashSaltLogRounds: number;
+    jwtAccessTokenSecret: string;
+    jwtRefreshTokenSecret: string;
+    accessTokenExpiration: string;
+    refreshTokenExpiration: string;
+  };
   pg: {
     host: string;
     port: number;

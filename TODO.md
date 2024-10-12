@@ -26,9 +26,14 @@
 - check if there are any credentials keys, just remove and make the project public (done)
 - implement testing sigin flow (done)
 - investigate whether database connection is closed after spect tests (done)
-
 - implement supabase for staging (done)
+
+- refactor to use 1 env file
+- remove appConfigs just only use the service of NestJS 
+
 - create endpoint refresh token 
+  - investigate what is session id (exist in refresh token)
+  
 - create endpoint reset password 
 - investigate sending email with Mailchimp
 - create endpoint delete account

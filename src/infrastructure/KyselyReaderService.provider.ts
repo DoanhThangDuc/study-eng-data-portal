@@ -11,7 +11,8 @@ export class KyselyReaderService<DB>
   private pool: Pool;
 
   constructor(configService: ConfigService) {
-    const config = configService.get<ConfigurationInterface>("config").pg;
+    const config = configService.get<ConfigurationInterface["pg"]>("pg");
+
     const poolPg = new Pool(config);
 
     super({
