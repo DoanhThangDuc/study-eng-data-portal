@@ -5,17 +5,14 @@ import {
   HttpException,
 } from "@nestjs/common";
 import { HttpArgumentsHost } from "@nestjs/common/interfaces";
-import { HttpAdapterHost } from "@nestjs/core";
 import { Response } from "express";
 import { HttpError } from "routing-controllers";
 import { ErrorFormatter } from "./ErrorFormatter";
+import { AppRequest } from "../../domains/InteractorContext";
 
 @Catch()
 export class GlobalException implements ExceptionFilter {
-  constructor(
-    private readonly httpAdapterHost: HttpAdapterHost,
-    private readonly errorFormatter: ErrorFormatter,
-  ) {}
+  constructor(private readonly errorFormatter: ErrorFormatter) {}
   catch(exception: unknown, host: ArgumentsHost) {
     const context = host.switchToHttp();
     try {
@@ -61,6 +58,13 @@ export class GlobalException implements ExceptionFilter {
     content: { body: any; status: number },
   ) {
     const response = context.getResponse<Response>();
+    const { method, url, logger, requestId } = context.getRequest<AppRequest>();
+
+    logger.error(
+      `Request ${requestId} failed: [${method}] ${url} - Status: ${content.status}`,
+      content.body,
+    );
+
     response.status(content.status).json(content.body);
   }
 }
