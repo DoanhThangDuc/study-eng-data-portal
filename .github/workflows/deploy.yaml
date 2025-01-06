@@ -27,14 +27,14 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      # Step 4: Install AWS SAM CLI
-      - name: Install AWS SAM CLI
+      # Step 4: Install or Update AWS SAM CLI
+      - name: Install or Update AWS SAM CLI
         run: |
           sudo apt-get update -y
           sudo apt-get install -y unzip curl
           curl -Lo aws-sam-cli.zip https://github.com/aws/aws-sam-cli/releases/latest/download/aws-sam-cli-linux-x86_64.zip
           unzip aws-sam-cli.zip -d sam-installation
-          sudo ./sam-installation/install
+          sudo ./sam-installation/install --update
 
       # Step 5: Deploy using AWS SAM
       - name: Deploy with SAM
