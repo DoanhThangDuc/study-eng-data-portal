@@ -46,4 +46,4 @@ jobs:
         run: |
           rm -rf .aws-sam/build
           sam build --cached
-          sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1 --force-upload
+          sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1 || echo "No changes to deploy."
