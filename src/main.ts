@@ -19,6 +19,7 @@ async function bootstrap() {
   app.enableCors();
 
   const errorFormatter = new ErrorFormatter();
+
   const configService = app.get<ConfigService>(ConfigService);
   const appPort =
     configService.get<ConfigurationInterface["appPort"]>("appPort");
