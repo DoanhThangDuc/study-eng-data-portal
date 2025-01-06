@@ -20,15 +20,16 @@ jobs:
         with:
           node-version: '18'
 
-      # Step 3: Install dependencies and build the project
+      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm install
+        run: npm ci  # Faster and consistent dependency installation
 
+      # Step 4: Build the project
       - name: Build the project
         run: npm run build
 
-      # Step 4: Install or Update AWS SAM CLI
-      - name: Install or Update AWS SAM CLI
+      # Step 5: Clean and Install AWS SAM CLI
+      - name: Clean and Install AWS SAM CLI
         run: |
           sudo apt-get update -y
           sudo apt-get install -y unzip curl
@@ -36,12 +37,13 @@ jobs:
           unzip aws-sam-cli.zip -d sam-installation
           sudo ./sam-installation/install --update
 
-      # Step 5: Deploy using AWS SAM
+      # Step 6: Force Rebuild with SAM and Deploy
       - name: Deploy with SAM
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-southeast-1
         run: |
-          sam build
+          rm -rf .aws-sam/build  # Clean build directory to ensure fresh artifacts
+          sam build --cached=false  # Force rebuild to include all changes
           sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1
