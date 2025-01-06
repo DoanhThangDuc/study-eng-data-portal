@@ -46,4 +46,4 @@ jobs:
         run: |
           rm -rf .aws-sam/build  # Clean previous build artifacts
           sam build --cached  # Enable caching to speed up builds
-          sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1
+          sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1 --force-upload
