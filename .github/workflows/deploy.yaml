@@ -44,6 +44,6 @@ jobs:
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-southeast-1
         run: |
-          rm -rf .aws-sam/build  # Clean previous build artifacts
-          sam build --cached  # Enable caching to speed up builds
+          rm -rf .aws-sam/build
+          sam build --cached
           sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1 --force-upload
