@@ -14,7 +14,12 @@ ALTER ROLE "auth-server" WITH SUPERUSER;
 
 3. Create Database
 ```bash
-CREATE DATABASE "study-eng";
+CREATE DATABASE study_eng;
+```
+
+4. Access to database
+```bash
+psql -U postgres -d study_eng;
 ```
 
 ## Installation

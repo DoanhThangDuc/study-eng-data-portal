@@ -1,0 +1,21 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Deploying NestJS application with GitHub Actions
+
+Resources:
+  NestJsLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./dist
+      Handler: main.handler
+      Runtime: nodejs18.x
+      MemorySize: 512
+      Timeout: 30
+      Policies:
+        - AWSLambdaBasicExecutionRole
+      Events:
+        ApiGatewayEvent:
+          Type: Api
+          Properties:
+            Path: /{proxy+}
+            Method: ANY
