@@ -6,7 +6,7 @@ Resources:
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./src
+      CodeUri: ./dist/src
       Handler: main.handler
       Runtime: nodejs18.x
       MemorySize: 512

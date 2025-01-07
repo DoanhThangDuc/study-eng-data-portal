@@ -28,7 +28,7 @@ jobs:
         run: |
           echo "Inspecting build output..."
           ls -R dist
-          if [ ! -f src/main.js ]; then
+          if [ ! -f dist/src/main.js ]; then
             echo "Error: main.js not found in dist directory. Check build configuration."
             exit 1
           fi
