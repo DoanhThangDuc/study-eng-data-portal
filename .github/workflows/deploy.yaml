@@ -3,40 +3,37 @@ name: Deploy to AWS Lambda
 on:
   push:
     branches:
-      - main  # Deploy on push to the main branch
+      - main
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
-      # Step 2: Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
-      # Step 3: Install dependencies
       - name: Install dependencies
-        run: npm ci  # Ensures a clean and consistent dependency installation
+        run: npm ci
 
-      # Step 4: Build the project
       - name: Build the project
         run: npm run build
 
-      # Step 5: Debug Build Output
       - name: Debug Build Output
         run: |
-          echo "Inspecting build output:"
+          echo "Inspecting build output..."
           ls -R dist
-          cat dist/main.js || echo "Handler file not found in dist."
+          if [ ! -f dist/main.js ]; then
+            echo "Error: main.js not found in dist directory. Check build configuration."
+            exit 1
+          fi
 
-      # Step 6: Install or Update AWS SAM CLI
-      - name: Install or Update AWS SAM CLI
+      - name: Install AWS SAM CLI
         run: |
           sudo apt-get update -y
           sudo apt-get install -y unzip curl
@@ -44,20 +41,25 @@ jobs:
           unzip aws-sam-cli.zip -d sam-installation
           sudo ./sam-installation/install --update
 
-      # Step 7: Build with SAM and Debug Artifacts
       - name: Build with SAM
         run: |
-          rm -rf .aws-sam/build
           sam build
-          echo "Inspecting SAM build artifacts:"
+          echo "Inspecting SAM build artifacts..."
           ls -R .aws-sam/build
-          cat .aws-sam/build/NestJsLambdaFunction/main.js || echo "Handler file not found in SAM artifacts."
+          if [ ! -f .aws-sam/build/NestJsLambdaFunction/main.js ]; then
+            echo "Error: main.js not found in SAM artifacts. Check SAM template configuration."
+            exit 1
+          fi
 
-      # Step 8: Deploy with SAM
       - name: Deploy with SAM
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-southeast-1
         run: |
-          sam deploy --resolve-s3 --stack-name nestjs-app --capabilities CAPABILITY_IAM --region ap-southeast-1 --force-upload || echo "No changes to deploy."
+          sam deploy \
+            --resolve-s3 \
+            --stack-name nestjs-app \
+            --capabilities CAPABILITY_IAM \
+            --region ap-southeast-1 \
+            --force-upload || echo "No changes to deploy."
