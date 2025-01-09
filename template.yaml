@@ -1,21 +1,67 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Deploying NestJS application to AWS Lambda
+Description: Deploying NestJS application to AWS Lambda with API Gateway
 
 Resources:
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist/src
-      Handler: main.handler
+      CodeUri: ./dist       
+      Handler: src/main.handler  
       Runtime: nodejs18.x
       MemorySize: 512
       Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
       Events:
-        ApiGateway:
+        DefaultRoute:
+          Type: Api
+          Properties:
+            Path: /
+            Method: ANY
+            ApiKeyRequired: true
+        ProxyRoute:
           Type: Api
           Properties:
             Path: /{proxy+}
             Method: ANY
+            ApiKeyRequired: true
+
+  NestJsApiGateway:
+    Type: AWS::Serverless::Api
+    Properties:
+      Name: NestJsApiGateway
+      StageName: Prod
+      ApiKeySourceType: HEADER
+      Auth:
+        ApiKeyRequired: true
+
+  NestJsApiKey:
+    Type: AWS::ApiGateway::ApiKey
+    Properties:
+      Name: NestJsApiKey
+      Enabled: true
+      StageKeys:
+        - RestApiId: !Ref NestJsApiGateway
+          StageName: Prod
+
+  NestJsUsagePlan:
+    Type: AWS::ApiGateway::UsagePlan
+    Properties:
+      UsagePlanName: NestJsUsagePlan
+      ApiStages:
+        - ApiId: !Ref NestJsApiGateway
+          Stage: Prod
+      Throttle:
+        RateLimit: 1000
+        BurstLimit: 200
+      Quota:
+        Limit: 10000
+        Period: MONTH
+
+  NestJsUsagePlanKey:
+    Type: AWS::ApiGateway::UsagePlanKey
+    Properties:
+      KeyId: !Ref NestJsApiKey
+      KeyType: API_KEY
+      UsagePlanId: !Ref NestJsUsagePlan
