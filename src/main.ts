@@ -48,6 +48,7 @@ async function bootstrapLocal() {
 }
 
 // Local development mode
+// Local development mode
 if (process.env.NODE_ENV === "development") {
   bootstrapLocal();
 }
