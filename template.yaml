@@ -3,6 +3,7 @@ Transform: AWS::Serverless-2016-10-31
 Description: Deploying NestJS application to AWS Lambda with API Gateway and Lambda Layer
 
 Resources:
+  # Lambda Function
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
@@ -29,6 +30,7 @@ Resources:
             Path: /{proxy+}
             Method: ANY
 
+  # Lambda Layer
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
@@ -38,6 +40,7 @@ Resources:
       CompatibleRuntimes:
         - nodejs18.x
 
+  # API Gateway
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -84,12 +87,15 @@ Resources:
                 httpMethod: POST
                 type: aws_proxy
 
+  # Deployment Resource
   NestJsApiGatewayDeployment:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref NestJsApiGateway
-      StageName: Prod
+    DependsOn:  
+      - NestJsLambdaFunction
 
+  # API Key
   NestJsApiKey:
     Type: AWS::ApiGateway::ApiKey
     Properties:
@@ -101,6 +107,7 @@ Resources:
     DependsOn:
       - NestJsApiGatewayDeployment
 
+  # Usage Plan
   NestJsUsagePlan:
     Type: AWS::ApiGateway::UsagePlan
     Properties:
@@ -115,6 +122,7 @@ Resources:
         Limit: 10000
         Period: MONTH
 
+  # Usage Plan Key
   NestJsUsagePlanKey:
     Type: AWS::ApiGateway::UsagePlanKey
     Properties:
