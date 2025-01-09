@@ -7,8 +7,8 @@ Resources:
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist         # Application code without node_modules
-      Handler: src/main.handler   # Refers to dist/src/main.js and the exported handler function
+      CodeUri: ./dist         
+      Handler: src/main.handler   
       Runtime: nodejs18.x
       MemorySize: 512
       Timeout: 30

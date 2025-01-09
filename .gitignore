@@ -2,7 +2,7 @@
 /dist
 /node_modules
 /build
-
+/.aws-sam
 # .env
 .env.staging
 .env.production
