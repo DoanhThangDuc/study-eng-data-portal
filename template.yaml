@@ -3,19 +3,18 @@ Transform: AWS::Serverless-2016-10-31
 Description: Deploying NestJS application to AWS Lambda with API Gateway and Lambda Layer
 
 Resources:
-  # Main Lambda Function
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist         # Directory containing the compiled app
-      Handler: src/main.handler   # Entry point for the Lambda function
+      CodeUri: ./dist
+      Handler: src/main.handler
       Runtime: nodejs18.x
       MemorySize: 512
       Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
       Layers:
-        - !Ref DependenciesLayer  # Attach the Lambda layer containing dependencies
+        - !Ref DependenciesLayer
       Events:
         DefaultRoute:
           Type: Api
@@ -30,17 +29,15 @@ Resources:
             Path: /{proxy+}
             Method: ANY
 
-  # Lambda Layer for Dependencies
   DependenciesLayer:
     Type: AWS::Serverless::LayerVersion
     Properties:
       LayerName: DependenciesLayer
       Description: Contains dependencies for the NestJS application
-      ContentUri: ./lambda-layer/layer.zip   # Path to the zipped layer
+      ContentUri: ./lambda-layer/layer.zip
       CompatibleRuntimes:
         - nodejs18.x
 
-  # API Gateway
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
@@ -63,6 +60,13 @@ Resources:
                   description: "Default response for /"
               security:
                 - api_key: []
+              x-amazon-apigateway-integration:
+                uri: !Sub
+                  - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}/invocations"
+                  - { LambdaFunctionArn: !GetAtt NestJsLambdaFunction.Arn }
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
           /{proxy+}:
             x-amazon-apigateway-any-method:
               produces:
@@ -72,13 +76,14 @@ Resources:
                   description: "Default response for /{proxy+}"
               security:
                 - api_key: []
-        securityDefinitions:
-          api_key:
-            type: "apiKey"
-            name: "x-api-key"
-            in: "header"
+              x-amazon-apigateway-integration:
+                uri: !Sub
+                  - "arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${LambdaFunctionArn}/invocations"
+                  - { LambdaFunctionArn: !GetAtt NestJsLambdaFunction.Arn }
+                passthroughBehavior: when_no_match
+                httpMethod: POST
+                type: aws_proxy
 
-  # API Key
   NestJsApiKey:
     Type: AWS::ApiGateway::ApiKey
     Properties:
@@ -88,7 +93,6 @@ Resources:
         - RestApiId: !Ref NestJsApiGateway
           StageName: Prod
 
-  # Usage Plan
   NestJsUsagePlan:
     Type: AWS::ApiGateway::UsagePlan
     Properties:
@@ -103,7 +107,6 @@ Resources:
         Limit: 10000
         Period: MONTH
 
-  # Usage Plan Key
   NestJsUsagePlanKey:
     Type: AWS::ApiGateway::UsagePlanKey
     Properties:
