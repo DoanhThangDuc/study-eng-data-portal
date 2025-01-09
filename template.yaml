@@ -7,8 +7,8 @@ Resources:
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist         
-      Handler: src/main.handler   
+      CodeUri: ./dist         # Directory containing the compiled app
+      Handler: src/main.handler   # Entry point for the Lambda function
       Runtime: nodejs18.x
       MemorySize: 512
       Timeout: 30
@@ -23,14 +23,12 @@ Resources:
             RestApiId: !Ref NestJsApiGateway
             Path: /
             Method: ANY
-            ApiKeyRequired: true
         ProxyRoute:
           Type: Api
           Properties:
             RestApiId: !Ref NestJsApiGateway
             Path: /{proxy+}
             Method: ANY
-            ApiKeyRequired: true
 
   # Lambda Layer for Dependencies
   DependenciesLayer:
@@ -41,16 +39,45 @@ Resources:
         - nodejs18.x
       Description: Contains dependencies for the NestJS application
 
-  # API Gateway Configuration (as before)
+  # API Gateway
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
       Name: NestJsApiGateway
       StageName: Prod
       ApiKeySourceType: HEADER
-      Auth:
-        ApiKeyRequired: true
+      DefinitionBody:
+        swagger: "2.0"
+        info:
+          title: "NestJs API"
+          description: "API Gateway for NestJs application"
+          version: "1.0"
+        paths:
+          /:
+            x-amazon-apigateway-any-method:
+              produces:
+                - application/json
+              responses:
+                default:
+                  description: "Default response for /"
+              security:
+                - api_key: []
+          /{proxy+}:
+            x-amazon-apigateway-any-method:
+              produces:
+                - application/json
+              responses:
+                default:
+                  description: "Default response for /{proxy+}"
+              security:
+                - api_key: []
+        securityDefinitions:
+          api_key:
+            type: "apiKey"
+            name: "x-api-key"
+            in: "header"
 
+  # API Key
   NestJsApiKey:
     Type: AWS::ApiGateway::ApiKey
     Properties:
@@ -60,6 +87,7 @@ Resources:
         - RestApiId: !Ref NestJsApiGateway
           StageName: Prod
 
+  # Usage Plan
   NestJsUsagePlan:
     Type: AWS::ApiGateway::UsagePlan
     Properties:
@@ -74,6 +102,7 @@ Resources:
         Limit: 10000
         Period: MONTH
 
+  # Usage Plan Key
   NestJsUsagePlanKey:
     Type: AWS::ApiGateway::UsagePlanKey
     Properties:
