@@ -84,6 +84,12 @@ Resources:
                 httpMethod: POST
                 type: aws_proxy
 
+  NestJsApiGatewayDeployment:
+    Type: AWS::ApiGateway::Deployment
+    Properties:
+      RestApiId: !Ref NestJsApiGateway
+      StageName: Prod
+
   NestJsApiKey:
     Type: AWS::ApiGateway::ApiKey
     Properties:
@@ -92,6 +98,8 @@ Resources:
       StageKeys:
         - RestApiId: !Ref NestJsApiGateway
           StageName: Prod
+    DependsOn:
+      - NestJsApiGatewayDeployment
 
   NestJsUsagePlan:
     Type: AWS::ApiGateway::UsagePlan
