@@ -44,7 +44,7 @@ Resources:
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      Name: NestJsApiGateway
+      Name: "NestJsApiGateway-${AWS::StackName}"
       StageName: Prod
       ApiKeySourceType: HEADER
       DefinitionBody:
