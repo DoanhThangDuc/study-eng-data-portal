@@ -32,12 +32,13 @@ Resources:
 
   # Lambda Layer for Dependencies
   DependenciesLayer:
-    Type: AWS::Lambda::LayerVersion
+    Type: AWS::Serverless::LayerVersion
     Properties:
+      LayerName: DependenciesLayer
+      Description: Contains dependencies for the NestJS application
       ContentUri: ./lambda-layer/layer.zip   # Path to the zipped layer
       CompatibleRuntimes:
         - nodejs18.x
-      Description: Contains dependencies for the NestJS application
 
   # API Gateway
   NestJsApiGateway:
