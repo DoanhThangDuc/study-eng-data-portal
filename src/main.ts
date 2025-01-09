@@ -62,6 +62,7 @@ async function bootstrapLambda() {
 }
 
 // AWS Lambda mode
+// AWS Lambda mode
 export const handler: Handler = async (
   event: any,
   context: Context,
