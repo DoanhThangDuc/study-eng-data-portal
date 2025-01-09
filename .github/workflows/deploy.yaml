@@ -64,7 +64,7 @@ jobs:
           sam build
           echo "Inspecting SAM build artifacts..."
           ls -R .aws-sam/build
-          if [ ! -f .aws-sam/build/NestJsLambdaFunction/main.js ]; then
+          if [ ! -f .aws-sam/build/NestJsLambdaFunction/src/main.js ]; then
             echo "Error: main.js not found in SAM artifacts. Check SAM template configuration."
             exit 1
           fi
