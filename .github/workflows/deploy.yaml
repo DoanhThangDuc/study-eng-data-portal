@@ -10,20 +10,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Step 1: Checkout the repository
       - name: Checkout code
         uses: actions/checkout@v3
 
+      # Step 2: Set up Node.js environment
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
 
+      # Step 3: Install dependencies
       - name: Install dependencies
         run: npm ci
 
+      # Step 4: Build the project
       - name: Build the project
         run: npm run build
 
+      # Step 5: Debug build output
       - name: Debug Build Output
         run: |
           echo "Inspecting build output..."
@@ -33,6 +38,18 @@ jobs:
             exit 1
           fi
 
+      # Step 6: Prepare Lambda Layer
+      - name: Create Lambda Layer
+        run: |
+          mkdir -p lambda-layer/nodejs
+          cp package.json package-lock.json lambda-layer/nodejs/
+          cd lambda-layer/nodejs
+          npm install --only=prod
+          cd ..
+          zip -r layer.zip nodejs
+          cd ../..
+
+      # Step 7: Install AWS SAM CLI
       - name: Install AWS SAM CLI
         run: |
           sudo apt-get update -y
@@ -41,6 +58,7 @@ jobs:
           unzip aws-sam-cli.zip -d sam-installation
           sudo ./sam-installation/install --update
 
+      # Step 8: Build with AWS SAM
       - name: Build with SAM
         run: |
           sam build
@@ -51,6 +69,7 @@ jobs:
             exit 1
           fi
 
+      # Step 9: Deploy with AWS SAM
       - name: Deploy with SAM
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}

@@ -1,32 +1,47 @@
 AWSTemplateFormatVersion: '2010-09-09'
 Transform: AWS::Serverless-2016-10-31
-Description: Deploying NestJS application to AWS Lambda with API Gateway
+Description: Deploying NestJS application to AWS Lambda with API Gateway and Lambda Layer
 
 Resources:
+  # Main Lambda Function
   NestJsLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      CodeUri: ./dist       
-      Handler: src/main.handler  
+      CodeUri: ./dist         # Application code without node_modules
+      Handler: src/main.handler   # Refers to dist/src/main.js and the exported handler function
       Runtime: nodejs18.x
       MemorySize: 512
       Timeout: 30
       Policies:
         - AWSLambdaBasicExecutionRole
+      Layers:
+        - !Ref DependenciesLayer  # Attach the Lambda layer containing dependencies
       Events:
         DefaultRoute:
           Type: Api
           Properties:
+            RestApiId: !Ref NestJsApiGateway
             Path: /
             Method: ANY
             ApiKeyRequired: true
         ProxyRoute:
           Type: Api
           Properties:
+            RestApiId: !Ref NestJsApiGateway
             Path: /{proxy+}
             Method: ANY
             ApiKeyRequired: true
 
+  # Lambda Layer for Dependencies
+  DependenciesLayer:
+    Type: AWS::Lambda::LayerVersion
+    Properties:
+      ContentUri: ./lambda-layer/layer.zip   # Path to the zipped layer
+      CompatibleRuntimes:
+        - nodejs18.x
+      Description: Contains dependencies for the NestJS application
+
+  # API Gateway Configuration (as before)
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
