@@ -80,5 +80,13 @@ jobs:
             --resolve-s3 \
             --stack-name nestjs-app \
             --capabilities CAPABILITY_IAM \
+            --region ap-southeast-1
+
+      # Step 10: Capture CloudFormation Events
+      - name: Capture CloudFormation Events
+        if: failure()
+        run: |
+          aws cloudformation describe-stack-events \
+            --stack-name nestjs-app \
             --region ap-southeast-1 \
-            --force-upload || echo "No changes to deploy."
+            --output table
