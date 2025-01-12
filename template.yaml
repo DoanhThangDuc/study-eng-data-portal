@@ -44,7 +44,7 @@ Resources:
   NestJsApiGateway:
     Type: AWS::Serverless::Api
     Properties:
-      Name: "NestJsApiGateway-${AWS::StackName}"
+      Name: "NestJsApiGateway"
       StageName: Prod
       ApiKeySourceType: HEADER
       DefinitionBody:
@@ -92,7 +92,9 @@ Resources:
     Type: AWS::ApiGateway::Deployment
     Properties:
       RestApiId: !Ref NestJsApiGateway
-    DependsOn:  
+      StageName: Prod
+    DependsOn:
+      - NestJsApiGateway
       - NestJsLambdaFunction
 
   # API Key
@@ -121,6 +123,8 @@ Resources:
       Quota:
         Limit: 10000
         Period: MONTH
+    DependsOn:
+      - NestJsApiGatewayDeployment
 
   # Usage Plan Key
   NestJsUsagePlanKey:
@@ -129,3 +133,5 @@ Resources:
       KeyId: !Ref NestJsApiKey
       KeyType: API_KEY
       UsagePlanId: !Ref NestJsUsagePlan
+    DependsOn:
+      - NestJsUsagePlan
