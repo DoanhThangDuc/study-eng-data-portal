@@ -69,19 +69,23 @@ jobs:
             exit 1
           fi
 
-      # Step 9: Check and Create S3 Bucket
-      - name: Create S3 Bucket if Not Exists
+      # Step 9: Check and Delete ROLLBACK_COMPLETE Stack
+      - name: Check and Delete ROLLBACK_COMPLETE Stack
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           AWS_REGION: ap-southeast-1
         run: |
-          BUCKET_NAME=study-english
-          if aws s3 ls "s3://$BUCKET_NAME" 2>&1 | grep -q 'NoSuchBucket'; then
-            echo "Bucket does not exist. Creating..."
-            aws s3 mb s3://$BUCKET_NAME --region $AWS_REGION
+          STACK_NAME=study-english
+          STACK_STATUS=$(aws cloudformation describe-stacks --stack-name $STACK_NAME --query 'Stacks[0].StackStatus' --output text --region $AWS_REGION || echo "DOES_NOT_EXIST")
+          if [ "$STACK_STATUS" = "ROLLBACK_COMPLETE" ]; then
+            echo "Stack is in ROLLBACK_COMPLETE state. Deleting..."
+            aws cloudformation delete-stack --stack-name $STACK_NAME --region $AWS_REGION
+            aws cloudformation wait stack-delete-complete --stack-name $STACK_NAME --region $AWS_REGION
+          elif [ "$STACK_STATUS" = "DOES_NOT_EXIST" ]; then
+            echo "Stack does not exist. Proceeding with deployment."
           else
-            echo "Bucket already exists."
+            echo "Stack is in $STACK_STATUS state. Proceeding with deployment."
           fi
 
       # Step 10: Deploy with AWS SAM
