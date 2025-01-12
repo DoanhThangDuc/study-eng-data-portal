@@ -81,6 +81,7 @@ jobs:
             --stack-name nestjs-app \
             --capabilities CAPABILITY_IAM \
             --region ap-southeast-1
+            --s3-bucket study-english
 
       # Step 10: Capture CloudFormation Events
       - name: Capture CloudFormation Events
