@@ -6,7 +6,7 @@ import { JwtStrategy } from "./JwtStrategy.provider";
 import { appConfigs } from "../pkgs/config/AppConfigs";
 import { JwtModule } from "@nestjs/jwt";
 import { PassportModule } from "@nestjs/passport";
-import { APP_GUARD, APP_INTERCEPTOR } from "@nestjs/core";
+import { APP_GUARD } from "@nestjs/core";
 import { JwtAuthGuard } from "./JwtAuthGuard.provider";
 import { loadConfiguration } from "../pkgs/config/loadConfiguration";
 @Module({
