@@ -1,7 +1,0 @@
-name: "label new pull request"
-description: "Adding a label when new pull request is opened"
-author: "Duc Doanh"
-
-runs: 
-  using: "node16"
-  main: "./src/dist/main.js"
