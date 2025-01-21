@@ -46,7 +46,8 @@ jobs:
       - name: Add EC2 to known hosts
         run: |
           mkdir -p ~/.ssh
-          ssh-keyscan -H $AWS_HOST >> ~/.ssh/known_hosts
+          echo "Adding EC2 instance to known hosts..."
+          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
 
       # Step 8: Deploy to AWS EC2
       - name: Deploy to AWS EC2
