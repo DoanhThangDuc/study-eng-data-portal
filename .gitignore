@@ -4,8 +4,8 @@
 /build
 /.aws-sam
 # .env
-.env.staging
-.env.production
+.env.*
+!.env
 
 # Logs
 logs
