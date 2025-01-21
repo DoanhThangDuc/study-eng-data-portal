@@ -13,14 +13,7 @@ export class KyselyReaderService<DB>
   constructor(configService: ConfigService) {
     const config = configService.get<ConfigurationInterface["pg"]>("pg");
 
-    const poolPg = new Pool({
-      host: "db.ygwnzfxsoizkrnhvntvc.supabase.co",
-      port: 5432,
-      database: "postgres",
-      user: "postgres",
-      password: "BScf2nRtc!gkbH2",
-    });
-
+    const poolPg = new Pool(config);
     super({
       dialect: new PostgresDialect({
         pool: poolPg,
