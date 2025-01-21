@@ -56,7 +56,7 @@ jobs:
           AWS_HOST: ${{ secrets.AWS_HOST }}
           AWS_USERNAME: ec2-user
         run: |
-          echo "$AWS_PRIVATE_KEY" | base64 --decode > private_key.pem
+          echo "$AWS_PRIVATE_KEY" > private_key.pem
           chmod 600 private_key.pem
 
           if [ ! -f private_key.pem ]; then
