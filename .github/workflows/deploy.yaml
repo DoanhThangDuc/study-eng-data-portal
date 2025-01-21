@@ -42,7 +42,13 @@ jobs:
             exit 1
           fi
 
-      # Step 7: Deploy to AWS EC2
+      # Step 7: Add EC2 instance to known hosts to avoid host verification failure
+      - name: Add EC2 to known hosts
+        run: |
+          mkdir -p ~/.ssh
+          ssh-keyscan -H $AWS_HOST >> ~/.ssh/known_hosts
+
+      # Step 8: Deploy to AWS EC2
       - name: Deploy to AWS EC2
         env:
           AWS_PRIVATE_KEY: ${{ secrets.AWS_PRIVATE_KEY }}
@@ -64,6 +70,6 @@ jobs:
 
           echo "Deployment completed successfully."
 
-      # Step 8: Clean up private key
+      # Step 9: Clean up private key
       - name: Clean up private key
         run: rm -f private_key.pem
