@@ -10,7 +10,7 @@ import { deleteUserByEmail } from "../../commonTests";
 describe("POST /v1/auth/signup", () => {
   let request: TestAgent<Test>;
   let kysely: KyselyReaderService<DB>;
-  const seeUserEmail: string[] = [];
+  const seedUserEmail: string[] = [];
 
   beforeEach(async () => {
     const appContext = getTestUserModule();
@@ -18,7 +18,7 @@ describe("POST /v1/auth/signup", () => {
   });
 
   afterEach(async () => {
-    await deleteUserByEmail(kysely, seeUserEmail);
+    await deleteUserByEmail(kysely, seedUserEmail);
   });
 
   it("should throw error when user upgrade not anonymous user", async () => {
@@ -32,18 +32,16 @@ describe("POST /v1/auth/signup", () => {
       preHashedPassword:
         "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
     };
-    seeUserEmail.push(userEmail1);
+    seedUserEmail.push(userEmail1);
 
     const responseUser1 = await request
       .post("/v1/auth/signup")
       .send(userCreatePayload)
       .expect(HttpStatus.CREATED);
-
     const { accessToken: accessTokenUser1 } = responseUser1.body;
 
     // arrange User2
     const userEmail2 = "user2@example.com";
-
     const userCreatePayload2 = {
       emailAddress: userEmail2,
       firstName: "John2",
@@ -51,7 +49,7 @@ describe("POST /v1/auth/signup", () => {
       preHashedPassword:
         "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
     };
-    seeUserEmail.push(userEmail2);
+    seedUserEmail.push(userEmail2);
 
     // act - calling create another User2 with User1 token
     const responseUser2 = await request
@@ -108,7 +106,7 @@ describe("POST /v1/auth/signup", () => {
       })
       .expect(HttpStatus.CREATED);
 
-    seeUserEmail.push(userEmail);
+    seedUserEmail.push(userEmail);
 
     // act - create a new user with existing email
     const responseExistingEmail = await request.post("/v1/auth/signup").send({
@@ -142,7 +140,7 @@ describe("POST /v1/auth/signup", () => {
       preHashedPassword:
         "3d8f6d40c2f0d5bc973c1a1fe53b178d90807e42c01b9d151ce2f561ab55200b",
     };
-    seeUserEmail.push(userEmail);
+    seedUserEmail.push(userEmail);
 
     // act - create a new user with existing email
     const response = await request

@@ -3,7 +3,7 @@ import * as dotenv from "dotenv";
 
 export class AppConfigsEnvironment implements AppConfigs {
   setup() {
-    dotenv.config({ path: `.env.${process.env.NODE_ENV}` });
+    dotenv.config();
   }
 
   get port(): number {
