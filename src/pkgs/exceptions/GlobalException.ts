@@ -59,7 +59,6 @@ export class GlobalException implements ExceptionFilter {
   ) {
     const response = context.getResponse<Response>();
     const { method, url, logger, requestId } = context.getRequest<AppRequest>();
-    console.log("test logger :>>", logger);
 
     logger.error(
       `Request ${requestId} failed: [${method}] ${url} - Status: ${content.status}`,
