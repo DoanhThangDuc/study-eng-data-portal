@@ -1,4 +1,4 @@
-name: "integraton-testing"
+name: "user-integration-testing"
 on: 
   push: 
     branches: 
@@ -8,7 +8,7 @@ on:
       - "main"
 
 jobs:
-  integraton-testing:
+  user-integration-testing:
     runs-on: ubuntu-latest
 
     services:
@@ -25,6 +25,12 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+
+    env:
+      POSTGRES_USER: test_user
+      POSTGRES_PASSWORD: test_user
+      POSTGRES_DB: test_user
+      DATABASE_URL: postgres://test_user:test_user@localhost:5432/test_user
 
     steps: 
       - name: Checkout code
@@ -46,6 +52,4 @@ jobs:
           echo "DATABASE_URL=$DATABASE_URL"
 
       - name: Run integration tests
-        env:
-          DATABASE_URL: postgres://test_user:test_user@localhost:5432/test_user
         run: npm run test:integration:user
