@@ -16,21 +16,15 @@ jobs:
         image: postgres:14
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: test_db
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: study_eng
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U postgres -d test_db"
+          --health-cmd="pg_isready -U postgres -d study_eng"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
-
-    env: 
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: test_db
-      DATABASE_URL: postgres://postgres:postgres@localhost:5432/test_db
 
     steps: 
       - name: Checkout code
@@ -44,20 +38,8 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      - name: Wait for PostgreSQL to be ready
-        run: |
-          echo "Waiting for PostgreSQL to be ready..."
-          until pg_isready -h localhost -p 5432 -U postgres; do
-            sleep 2
-          done
-          echo "PostgreSQL is ready!"
-
       - name: Debug environment variables
-        run: |
-          echo "POSTGRES_USER=$POSTGRES_USER"
-          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
-          echo "POSTGRES_DB=$POSTGRES_DB"
-          echo "DATABASE_URL=$DATABASE_URL"
+        run: cat .env
 
       - name: Run integration tests
         run: npm run test:integration:user
