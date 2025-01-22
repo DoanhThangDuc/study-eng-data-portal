@@ -1,4 +1,4 @@
-name: "integraton-testing"
+name: "IntegratonTesting"
 on: 
   push: 
     branches: 
