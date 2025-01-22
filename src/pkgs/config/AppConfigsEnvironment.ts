@@ -38,7 +38,7 @@ export class AppConfigsEnvironment implements AppConfigs {
   }
 
   get pgPass(): string {
-    return process.env.DATABASE_PASSWORD || "password";
+    return String(process.env.DATABASE_PASSWORD) || "password";
   }
   get hashSaltLogRounds(): number {
     return Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10;
