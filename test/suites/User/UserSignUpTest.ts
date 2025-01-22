@@ -61,7 +61,7 @@ describe("POST /v1/auth/signup", () => {
     expect(responseUser2.body).toMatchObject({
       type: "IllegalState",
       options: {},
-      status: "ERROR",
+      status: "ERRORs",
       debugMessage: "Can't upgrade not anonymous user",
     });
   });
