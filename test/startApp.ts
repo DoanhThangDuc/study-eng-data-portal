@@ -15,9 +15,9 @@ export async function migrateDatabase() {
   const knex = Knex({
     client: "pg",
     connection: {
-      host: process.env.DB_HOST,
-      user: process.env.DB_USER,
-      password: process.env.DB_PASSWORD,
+      host: process.env.DATABASE_HOST,
+      user: process.env.DATABASE_USER,
+      password: process.env.DATABASE_PASSWORD,
       database: process.env.DATABASE_NAME,
     },
     migrations: {
