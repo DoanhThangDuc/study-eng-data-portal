@@ -39,15 +39,5 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # - name: Set environment variables
-      #   run: |
-      #     echo "DATABASE_HOST=localhost" >> .env
-      #     echo "DATABASE_USER=postgres" >> .env
-      #     echo "DATABASE_PASSWORD=password123" >> .env
-      #     echo "DATABASE_NAME=test_user" >> .env
-      #     echo "DATABASE_PORT=5432" >> .env
-
       - name: Run integration tests
         run: npm run test:integration:user
-        # env:
-        #   DATABASE_URL: postgres://postgres:password123@localhost:5432/test_user
