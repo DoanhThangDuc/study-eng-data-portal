@@ -1,9 +1,6 @@
-name: "user-integration-testing"
+name: "integration-testing"
 
 on: 
-  push: 
-    branches: 
-      - 'main'
   pull_request: 
     branches: 
       - "main"

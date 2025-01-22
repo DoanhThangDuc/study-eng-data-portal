@@ -1,15 +1,24 @@
-name: "deployment"
+name: "staging-deployment"
 
 on: 
+  push: 
+    branches: 
+      - 'main'
+
   workflow_run:
     workflows:
-      - "user-integration-testing"
+      - "integration-testing"
     types: 
       - completed
 
 jobs:
-  hello:
+  deploy-to-staging:
     runs-on: ubuntu-latest
     steps: 
-      - name: "Say hello"
-        run: echo "Say hello"
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Deploy to EC2
+        run: |
+          echo "Deploying to EC2..."
+          # Add your deployment script here
