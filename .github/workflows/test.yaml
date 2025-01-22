@@ -19,6 +19,6 @@ jobs:
         with: 
           node-version: 18.17
       - name: Install dependencies
-        uses: npm ci
+        run: npm ci
       - name: user.controller
         run: npm run test:integration:user
