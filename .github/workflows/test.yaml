@@ -19,21 +19,33 @@ jobs:
           POSTGRES_PASSWORD: test_user
           POSTGRES_DB: test_user
         ports:
-        - 5432:5432
+          - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U testuser -d testdb"
+          --health-cmd="pg_isready -U test_user -d test_user"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps: 
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v2
-      - name: Setup Node
+
+      - name: Setup Node.js
         uses: actions/setup-node@v2
-        with: 
+        with:
           node-version: 18.17
+
       - name: Install dependencies
         run: npm ci
-      - name: user.controller
+
+      - name: Debug environment variables
+        run: |
+          echo "POSTGRES_USER=$POSTGRES_USER"
+          echo "POSTGRES_PASSWORD=$POSTGRES_PASSWORD"
+          echo "POSTGRES_DB=$POSTGRES_DB"
+          echo "DATABASE_URL=$DATABASE_URL"
+
+      - name: Run integration tests
+        env:
+          DATABASE_URL: postgres://test_user:test_user@localhost:5432/test_user
         run: npm run test:integration:user
