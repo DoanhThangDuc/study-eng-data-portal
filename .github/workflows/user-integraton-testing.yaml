@@ -17,7 +17,7 @@ jobs:
         image: postgres:14
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: password
+          POSTGRES_PASSWORD: password123   
           POSTGRES_DB: test_user
         ports:
           - 5432:5432
@@ -26,6 +26,7 @@ jobs:
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
+          --password-encryption=md5   
 
     steps: 
       - name: Checkout code
@@ -43,11 +44,11 @@ jobs:
         run: |
           echo "DATABASE_HOST=localhost" >> .env
           echo "DATABASE_USER=postgres" >> .env
-          echo "DATABASE_PASSWORD=password" >> .env
+          echo "DATABASE_PASSWORD=password123" >> .env
           echo "DATABASE_NAME=test_user" >> .env
           echo "DATABASE_PORT=5432" >> .env
 
       - name: Run integration tests
         run: npm run test:integration:user
         env:
-          DATABASE_URL: postgres://postgres:password@localhost:5432/test_user
+          DATABASE_URL: postgres://postgres:password123@localhost:5432/test_user
