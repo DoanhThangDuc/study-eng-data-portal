@@ -6,7 +6,7 @@ on:
       - "main"
 
 jobs:
-  user-integration-testing:
+  user_integration_testing:
     runs-on: ubuntu-latest
 
     services:
