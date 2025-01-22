@@ -12,7 +12,7 @@ on:
       - completed
 
 jobs:
-  deploy-to-staging:
+  deploy_to_staging:
     runs-on: ubuntu-latest
     
     steps:
