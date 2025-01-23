@@ -67,10 +67,10 @@ jobs:
           fi
 
           echo "Deploying to EC2 instance..."
-          scp -i private_key.pem -r dist package.json package-lock.json $AWS_USERNAME@$AWS_HOST:/home/ec2-user/app
+          scp -i private_key.pem -r dist package.json package-lock.json $AWS_USERNAME@$AWS_HOST:/home/ec2-user/study-eng-data-portal
 
           ssh -i private_key.pem $AWS_USERNAME@$AWS_HOST << 'EOF'
-            cd /home/ec2-user/app
+            cd /home/ec2-user/study-eng-data-portal
             npm ci --omit=dev
             pm2 restart all || pm2 start "npm run start:staging" --name "study-english-data-portal"
             exit
