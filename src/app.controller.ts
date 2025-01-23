@@ -9,7 +9,7 @@ export class AppController {
   getHello() {
     return {
       message:
-        "Hello this is a non-profit project to support students to learn English v1",
+        "Hello this is a non-profit project to support students to learn English v0",
     };
   }
 }
