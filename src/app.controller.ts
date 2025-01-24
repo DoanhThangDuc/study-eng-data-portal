@@ -8,8 +8,7 @@ export class AppController {
   @Get()
   getHello() {
     return {
-      message:
-        "Hello this is a non-profit project to support students to learn English",
+      message: `Hello this is a non-profit project to support students to learn English:\n env ${process.env.JWT_ACCESSTOKEN_SECRET};\n env config service: ${this.congfigService.get("jwt.jwtAccessSecret")}`,
     };
   }
 }
