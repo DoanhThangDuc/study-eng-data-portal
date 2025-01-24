@@ -15,6 +15,7 @@ import { loadConfiguration } from "../pkgs/config/loadConfiguration";
     ConfigModule.forRoot({
       load: [loadConfiguration],
       isGlobal: true,
+      envFilePath: [".env"],
     }),
     PassportModule,
     JwtModule.register({
