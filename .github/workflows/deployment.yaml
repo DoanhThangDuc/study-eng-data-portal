@@ -71,7 +71,7 @@ jobs:
           fi
 
           echo "Deploying to EC2 instance..."
-          scp -i private_key.pem -r dist package.json package-lock.json $AWS_USERNAME@$AWS_HOST:/home/ec2-user/study_english_data_portal
+          scp -i private_key.pem -r dist package.json package-lock.json .env $AWS_USERNAME@$AWS_HOST:/home/ec2-user/study_english_data_portal
 
           ssh -i private_key.pem $AWS_USERNAME@$AWS_HOST << 'EOF'
             cd /home/ec2-user/study_english_data_portal
