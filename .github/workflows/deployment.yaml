@@ -51,9 +51,6 @@ jobs:
           mkdir -p ~/.ssh
           echo "Adding EC2 instance to known hosts..."
           ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
-          # Debug known hosts
-          echo "Known hosts after ssh-keyscan:"
-          cat ~/.ssh/known_hosts
 
       # Step 7: Set up AWS CLI
       - name: Set up AWS CLI
@@ -88,7 +85,7 @@ jobs:
       # Step 9: Deploy to AWS EC2
       - name: Deploy to AWS EC2
         run: |
-          echo "$AWS_PRIVATE_KEY" > private_key.pem
+          echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
           if [ ! -f private_key.pem ]; then
@@ -98,6 +95,7 @@ jobs:
 
           echo "Deploying to EC2 instance..."
           # Transfer the build, .env file, and other necessary files to EC2
+          echo "Copying nessesery files into source..."
           scp -i private_key.pem -r dist package.json package-lock.json .env ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/study_english_data_portal
 
           # SSH to EC2 to restart services
