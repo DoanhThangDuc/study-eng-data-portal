@@ -70,15 +70,33 @@ jobs:
           # Loop through each secret name and fetch its value
           for secret_name in $secret_names; do
             secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
-      
-            # Convert the secret to key-value format if it's JSON
+        
+            # Check if the secret is in JSON format
             if echo "$secret_value" | jq -e . >/dev/null 2>&1; then
-              # Extract key-value pairs from the JSON
-              echo "$secret_value" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> .env
+              # Extract key-value pairs from the JSON and replace existing keys in .env
+              echo "$secret_value" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read -r line; do
+                key=$(echo $line | cut -d '=' -f 1)
+                value=$(echo $line | cut -d '=' -f 2-)
+                
+                # Check if the key already exists in .env and replace its value
+                if grep -q "^$key=" .env; then
+                  sed -i "s|^$key=.*|$key=$value|" .env
+                else
+                  # If key doesn't exist in .env, add it
+                  echo "$line" >> .env
+                fi
+              done
             else
               # If the secret is a plain string, treat it as a single value
               secret_key=$(basename "$secret_name")
-              echo "$secret_key=$secret_value" >> .env
+              
+              # Check if the key already exists in .env and replace its value
+              if grep -q "^$secret_key=" .env; then
+                sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env
+              else
+                # If key doesn't exist in .env, add it
+                echo "$secret_key=$secret_value" >> .env
+              fi
             fi
           done
 
