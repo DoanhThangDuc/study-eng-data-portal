@@ -96,17 +96,12 @@ jobs:
             exit 1
           fi
 
-          # Debug SSH connection details
-          echo "Attempting SSH connection to EC2..."
-          echo "AWS_HOST: ${{ secrets.AWS_HOST }}"
-          echo "AWS_USERNAME: $AWS_USERNAME"
-
           echo "Deploying to EC2 instance..."
           # Transfer the build, .env file, and other necessary files to EC2
-          scp -i private_key.pem -r dist package.json package-lock.json .env $AWS_USERNAME@$AWS_HOST:/home/ec2-user/study_english_data_portal
+          scp -i private_key.pem -r dist package.json package-lock.json .env ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/study_english_data_portal
 
           # SSH to EC2 to restart services
-          ssh -i private_key.pem $AWS_USERNAME@$AWS_HOST << 'EOF'
+          ssh -i private_key.pem ec2-user@${{ secrets.AWS_HOST }} << 'EOF'
             cd /home/ec2-user/study_english_data_portal
             npm ci --omit=dev
             pm2 restart all || pm2 start "npm run start:staging" --name "study_english_data_portal"
