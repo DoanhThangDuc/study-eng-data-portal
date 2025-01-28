@@ -98,7 +98,7 @@ jobs:
 
           # Debug SSH connection details
           echo "Attempting SSH connection to EC2..."
-          echo "AWS_HOST: $AWS_HOST"
+          echo "AWS_HOST: ${{ secrets.AWS_HOST }}"
           echo "AWS_USERNAME: $AWS_USERNAME"
 
           echo "Deploying to EC2 instance..."
