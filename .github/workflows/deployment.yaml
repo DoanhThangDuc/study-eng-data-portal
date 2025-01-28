@@ -70,14 +70,14 @@ jobs:
           # Loop through each secret name and fetch its value
           for secret_name in $secret_names; do
             secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
-            # Extract the secret key name from the secret name
-            secret_key=$(basename $secret_name)
-            # Replace or append the secret key-value pair in the .env file
-            if grep -q "^$secret_key=" .env; then
-              # Update existing key
-              sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env
+      
+            # Convert the secret to key-value format if it's JSON
+            if echo "$secret_value" | jq -e . >/dev/null 2>&1; then
+              # Extract key-value pairs from the JSON
+              echo "$secret_value" | jq -r 'to_entries[] | "\(.key)=\(.value)"' >> .env
             else
-              # Add new key
+              # If the secret is a plain string, treat it as a single value
+              secret_key=$(basename "$secret_name")
               echo "$secret_key=$secret_value" >> .env
             fi
           done
