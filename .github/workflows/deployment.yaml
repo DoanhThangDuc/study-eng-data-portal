@@ -56,7 +56,7 @@ jobs:
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}  # Temporarily using GitHub Secrets for AWS CLI access
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
@@ -85,7 +85,7 @@ jobs:
       # Step 9: Deploy to AWS EC2
       - name: Deploy to AWS EC2
         run: |
-          echo "${{ secrets.AWS_SECRET_ACCESS_KEY }}" > private_key.pem
+          echo "${{ secrets.AWS_PRIVATE_KEY }}" > private_key.pem
           chmod 600 private_key.pem
 
           if [ ! -f private_key.pem ]; then
@@ -95,7 +95,6 @@ jobs:
 
           echo "Deploying to EC2 instance..."
           # Transfer the build, .env file, and other necessary files to EC2
-          echo "Copying nessesery files into source..."
           scp -i private_key.pem -r dist package.json package-lock.json .env ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/study_english_data_portal
 
           # SSH to EC2 to restart services
