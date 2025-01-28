@@ -61,26 +61,26 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       # Step 8: Fetch all secrets and update .env file
-      - name: Fetch all secrets and update .env
-        id: update-env
-        run: |
-          # Fetch all secret names from AWS Secrets Manager
-          secret_names=$(aws secretsmanager list-secrets --query "SecretList[].Name" --output text)
+      # - name: Fetch all secrets and update .env
+      #   id: update-env
+      #   run: |
+      #     # Fetch all secret names from AWS Secrets Manager
+      #     secret_names=$(aws secretsmanager list-secrets --query "SecretList[].Name" --output text)
 
-          # Loop through each secret name and fetch its value
-          for secret_name in $secret_names; do
-            secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
-            # Extract the secret key name from the secret name
-            secret_key=$(basename $secret_name)
-            # Replace or append the secret key-value pair in the .env file
-            if grep -q "^$secret_key=" .env; then
-              # Update existing key
-              sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env
-            else
-              # Add new key
-              echo "$secret_key=$secret_value" >> .env
-            fi
-          done
+      #     # Loop through each secret name and fetch its value
+      #     for secret_name in $secret_names; do
+      #       secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
+      #       # Extract the secret key name from the secret name
+      #       secret_key=$(basename $secret_name)
+      #       # Replace or append the secret key-value pair in the .env file
+      #       if grep -q "^$secret_key=" .env; then
+      #         # Update existing key
+      #         sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env
+      #       else
+      #         # Add new key
+      #         echo "$secret_key=$secret_value" >> .env
+      #       fi
+      #     done
 
       # Step 9: Deploy to AWS EC2
       - name: Deploy to AWS EC2
