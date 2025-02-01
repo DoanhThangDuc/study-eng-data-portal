@@ -43,7 +43,7 @@ export class AppConfigsEnvironment implements AppConfigs {
   get hashSaltLogRounds(): number {
     return Number.parseInt(process.env.HASH_SALT_LOG_ROUNDS) || 10;
   }
-  get jwtAccessSecret(): string {
+  get jwtAccessTokenSecret(): string {
     return process.env.JWT_ACCESSTOKEN_SECRET || "secret";
   }
   get jwtRefreshSecret(): string {

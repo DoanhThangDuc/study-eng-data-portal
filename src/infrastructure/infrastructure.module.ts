@@ -19,7 +19,7 @@ import { loadConfiguration } from "../pkgs/config/loadConfiguration";
     }),
     PassportModule,
     JwtModule.register({
-      secret: appConfigs.jwtAccessSecret,
+      secret: appConfigs.jwtAccessTokenSecret,
       signOptions: { expiresIn: appConfigs.accessTokenExpiresIn },
     }),
   ],

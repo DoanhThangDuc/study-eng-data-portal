@@ -11,7 +11,7 @@ export interface AppConfigs {
   pgPort: number;
   pgUser: string;
   pgPass: string;
-  jwtAccessSecret: string;
+  jwtAccessTokenSecret: string;
   jwtRefreshSecret: string;
   accessTokenExpiresIn: string;
   refreshTokenExpiresIn: string;
