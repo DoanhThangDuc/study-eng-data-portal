@@ -1,8 +1,8 @@
 import * as dotenv from "dotenv";
 import { Knex } from "knex";
 
+console.log("Current working directory:", process.cwd());
 dotenv.config();
-
 console.log("Environment Variables:");
 console.log("DATABASE_HOST:", process.env.DATABASE_HOST);
 console.log("DATABASE_PORT:", process.env.DATABASE_PORT);
