@@ -1,11 +1,8 @@
 import * as dotenv from "dotenv";
+import * as path from "path";
 import { Knex } from "knex";
 
-console.log("Current working directory:", process.cwd());
-dotenv.config({ path: "/home/ec2-user/study_english_data_portal/.env" });
-console.log("Environment Variables:");
-console.log("DATABASE_HOST:", process.env.DATABASE_HOST);
-console.log("DATABASE_PORT:", process.env.DATABASE_PORT);
+dotenv.config({ path: path.resolve(__dirname, "../.env") });
 
 const baseConfig: Knex.Config = {
   client: process.env.DATABASE_CLIENT || "postgres",
@@ -18,7 +15,7 @@ const baseConfig: Knex.Config = {
   },
   migrations: {
     tableName: "knex_migrations",
-    directory: "./src/knexMigrations",
+    directory: "./dist/src/knexMigrations",
   },
 };
 
