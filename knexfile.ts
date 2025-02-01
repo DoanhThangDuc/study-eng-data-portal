@@ -15,7 +15,7 @@ const baseConfig: Knex.Config = {
   },
   migrations: {
     tableName: "knex_migrations",
-    directory: "./dist/src/knexMigrations",
+    directory: "./src/knexMigrations",
   },
 };
 
