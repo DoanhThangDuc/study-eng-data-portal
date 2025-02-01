@@ -38,7 +38,9 @@ jobs:
           [[ -f dist/src/main.js ]] || { echo "Error: main.js not found in dist directory."; exit 1; }
 
       - name: Add EC2 instance to known hosts
-        run: ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
+        run: |
+          mkdir -p ~/.ssh  # Ensure the .ssh directory exists
+          ssh-keyscan -H ${{ secrets.AWS_HOST }} >> ~/.ssh/known_hosts
 
       - name: Set up AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
