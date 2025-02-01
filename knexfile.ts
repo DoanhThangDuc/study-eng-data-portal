@@ -1,17 +1,16 @@
-import dotenv from "dotenv";
+import * as dotenv from "dotenv";
 import { Knex } from "knex";
-import { appConfigs } from "./src/pkgs/config/AppConfigs";
 
 dotenv.config();
 
 const baseConfig: Knex.Config = {
-  client: appConfigs.pgClient,
+  client: process.env.DATABASE_CLIENT || "postgres",
   connection: {
-    host: appConfigs.pgHost,
-    port: appConfigs.pgPort,
-    user: appConfigs.pgUser,
-    password: appConfigs.pgPass,
-    database: appConfigs.pgDbName,
+    host: process.env.DATABASE_HOST || "localhost",
+    port: Number.parseInt(process.env.DATABASE_PORT) || 5432,
+    user: process.env.DATABASE_USER || "postgres",
+    password: String(process.env.DATABASE_PASSWORD) || "password",
+    database: process.env.DATABASE_NAME || "study_eng",
   },
   migrations: {
     tableName: "knex_migrations",
@@ -19,7 +18,6 @@ const baseConfig: Knex.Config = {
   },
 };
 
-appConfigs.setup();
 const config: { [key: string]: Knex.Config } = {
   development: {
     ...baseConfig,
@@ -28,8 +26,8 @@ const config: { [key: string]: Knex.Config } = {
   staging: {
     ...baseConfig,
     pool: {
-      min: appConfigs.minPool,
-      max: appConfigs.maxPool,
+      min: Number.parseInt(process.env.MIN_POOL) || 2,
+      max: Number.parseInt(process.env.MAX_POOL) || 10,
     },
   },
 };

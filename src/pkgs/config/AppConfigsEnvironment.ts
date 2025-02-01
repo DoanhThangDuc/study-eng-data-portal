@@ -55,7 +55,4 @@ export class AppConfigsEnvironment implements AppConfigs {
   get refreshTokenExpiresIn(): string {
     return process.env.REFRESHTOKEN_TOKEN_EXPIRATION_TIME || "1h";
   }
-  get testingKey(): string {
-    return process.env.TESTING_KEY;
-  }
 }

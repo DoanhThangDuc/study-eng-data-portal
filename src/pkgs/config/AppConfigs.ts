@@ -16,7 +16,6 @@ export interface AppConfigs {
   accessTokenExpiresIn: string;
   refreshTokenExpiresIn: string;
   hashSaltLogRounds: number;
-  testingKey: string;
 }
 
 export const appConfigs: AppConfigs = new AppConfigsEnvironment();
