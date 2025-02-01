@@ -119,6 +119,10 @@ jobs:
           ssh -i private_key.pem ec2-user@${{ secrets.AWS_HOST }} << 'EOF'
             cd /home/ec2-user/study_english_data_portal
             npm ci --omit=dev
+
+            echo "Running database migrations..."
+            npm run migrate:staging:latest
+
             pm2 restart all || pm2 start "npm run start:staging" --name "study_english_data_portal"
             exit
           EOF
