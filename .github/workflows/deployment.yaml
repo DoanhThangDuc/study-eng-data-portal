@@ -74,7 +74,7 @@ jobs:
           [[ -f private_key.pem ]] || { echo "Private key file not found!"; exit 1; }
       
           echo "Deploying to EC2 instance..."
-          scp -i private_key.pem -r dist package.json package-lock.json knexfile.js .env ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/study_english_data_portal
+          scp -i private_key.pem -r dist package.json package-lock.json .env ec2-user@${{ secrets.AWS_HOST }}:/home/ec2-user/study_english_data_portal
       
           ssh -i private_key.pem ec2-user@${{ secrets.AWS_HOST }} << 'EOF'
             set -e  # Exit on error
