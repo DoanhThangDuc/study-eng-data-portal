@@ -79,7 +79,9 @@ jobs:
           ssh -i private_key.pem ec2-user@${{ secrets.AWS_HOST }} << 'EOF'
             set -e  # Exit on error
             cd /home/ec2-user/study_english_data_portal
-            npm ci --omit=dev  # Ensure all dependencies are installed
+            
+            # Ensure ALL dependencies (including devDependencies like tsconfig-paths) are installed
+            npm install --legacy-peer-deps  
 
             echo "Running database migrations..."
             npm run migrate:staging:latest
