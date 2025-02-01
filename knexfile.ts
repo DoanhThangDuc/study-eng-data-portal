@@ -3,6 +3,10 @@ import { Knex } from "knex";
 
 dotenv.config();
 
+console.log("Environment Variables:");
+console.log("DATABASE_HOST:", process.env.DATABASE_HOST);
+console.log("DATABASE_PORT:", process.env.DATABASE_PORT);
+
 const baseConfig: Knex.Config = {
   client: process.env.DATABASE_CLIENT || "postgres",
   connection: {
