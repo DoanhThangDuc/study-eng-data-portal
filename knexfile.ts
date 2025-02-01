@@ -1,5 +1,8 @@
-import type { Knex } from "knex";
+import dotenv from "dotenv";
+import { Knex } from "knex";
 import { appConfigs } from "./src/pkgs/config/AppConfigs";
+
+dotenv.config();
 
 const baseConfig: Knex.Config = {
   client: appConfigs.pgClient,
