@@ -11,7 +11,14 @@ export async function createApp() {
     bufferLogs: true,
   });
 
-  app.enableCors();
+  app.enableCors({
+    origin: "*", 
+    allowedHeaders: "Authorization, *",
+    exposedHeaders: "Authorization,RefreshToken",
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  });
+
   const errorFormatter = new ErrorFormatter();
 
   const configService = app.get<ConfigService>(ConfigService);
