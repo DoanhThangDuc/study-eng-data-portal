@@ -60,12 +60,12 @@ describe("POST /v1/auth/signin", () => {
 
     // assert - should validate user payload
     expect(pick(response, ["status", "body"])).toMatchObject({
-      status: HttpStatus.UNAUTHORIZED,
+      status: HttpStatus.NOT_FOUND,
       body: {
-        debugMessage: "User not found!",
+        debugMessage: "User not found",
         options: {},
         status: "ERROR",
-        type: "Unauthorized",
+        type: "UserNotFoundError",
       },
     });
   });

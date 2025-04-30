@@ -1,11 +1,11 @@
 import { HttpException, HttpStatus } from "@nestjs/common";
 
-export class InvalidAuthorizationTokenException extends HttpException {
+export class InvalidAuthorizationTokenError extends HttpException {
   constructor() {
     super(
       {
         status: "ERROR",
-        type: "InvalidAuthorizationToken",
+        type: "InvalidAuthorizationTokenError",
         debugMessage: "The Token's Signature resulted invalid",
         options: {},
       },

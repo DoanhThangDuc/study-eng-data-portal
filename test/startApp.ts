@@ -33,7 +33,6 @@ export async function migrateDatabase() {
 export async function startApp(): Promise<{
   client: pg.Client;
 }> {
-  console.log("startApp");
   appConfigs.setup();
 
   const client = new pg.Client({

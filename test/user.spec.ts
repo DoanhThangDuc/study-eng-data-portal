@@ -10,3 +10,4 @@ afterAll(async () => {});
 
 import "./suites/User/UserSignUpTest";
 import "./suites/User/UserSignInTest";
+import "./suites/User/UserGetMeTest";

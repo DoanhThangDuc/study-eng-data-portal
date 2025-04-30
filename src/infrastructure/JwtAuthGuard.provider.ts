@@ -1,7 +1,7 @@
 import { ExecutionContext, Injectable } from "@nestjs/common";
 import { AuthGuard } from "@nestjs/passport";
 import { Observable } from "rxjs";
-import { InvalidAuthorizationTokenException } from "../pkgs/errors/InvalidAuthorizationTokenException";
+import { InvalidAuthorizationTokenError } from "../pkgs/errors/InvalidAuthorizationTokenError";
 
 @Injectable()
 export class JwtAuthGuard extends AuthGuard("jwt") {
@@ -21,7 +21,7 @@ export class JwtAuthGuard extends AuthGuard("jwt") {
         (info.message === "invalid signature" ||
           info.message === "invalid token"))
     ) {
-      throw new InvalidAuthorizationTokenException();
+      throw new InvalidAuthorizationTokenError();
     }
 
     return null;

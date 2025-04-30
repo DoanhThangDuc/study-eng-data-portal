@@ -8,7 +8,6 @@ import { UserSignInInteractor } from "./UserSignIn/UserSignInInteractor";
 import { PassportModule } from "@nestjs/passport";
 import { PasswordHasher } from "./actions/PasswordHasher";
 import { TokenGenerator } from "./actions/TokenGenerator";
-import { UserGetMeInteractor } from "./UserGetMe/UserGetMeInteractor";
 
 @Module({
   imports: [InfrastructureModule, PassportModule],
@@ -17,7 +16,6 @@ import { UserGetMeInteractor } from "./UserGetMe/UserGetMeInteractor";
     UserSignUpInteractor,
     UserSignUpAction,
     UserSignInInteractor,
-    UserGetMeInteractor,
     UserSignInAction,
     PasswordHasher,
     TokenGenerator,

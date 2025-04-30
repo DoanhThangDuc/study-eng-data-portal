@@ -3,7 +3,7 @@ import { HttpError } from "routing-controllers";
 
 export class UserNotFoundError extends HttpError {
   constructor() {
-    super(HttpStatus.CONFLICT);
+    super(HttpStatus.NOT_FOUND);
     Object.setPrototypeOf(this, UserNotFoundError.prototype);
   }
 

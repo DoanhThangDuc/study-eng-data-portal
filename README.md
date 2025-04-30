@@ -8,7 +8,7 @@ psql -U postgres
 
 2. Create user 
 ```bash
-CREATE USER "postgres" WITH PASSWORD 'Password';
+CREATE USER "auth-server" WITH PASSWORD 'Password';
 ALTER ROLE "auth-server" WITH SUPERUSER;
 ```
 
