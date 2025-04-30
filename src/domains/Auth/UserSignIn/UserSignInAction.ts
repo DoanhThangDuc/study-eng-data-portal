@@ -1,4 +1,4 @@
-import { Injectable, UnauthorizedException } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { UserSignInPayloadDto } from "../dtos/UserSignInPayloadDto";
 import { DB } from "../../../db/types";
 import { KyselyReaderService } from "../../../infrastructure/KyselyReaderService.provider";
@@ -6,6 +6,7 @@ import { InteractorContext } from "../../InteractorContext";
 import { PasswordHasher } from "../actions/PasswordHasher";
 import { TokenGenerator } from "../actions/TokenGenerator";
 import { TokenUser } from "../../TokenUser";
+import { UserNotFoundError } from "../../../pkgs/errors/UserNotFoundError";
 
 @Injectable()
 export class UserSignInAction {
@@ -26,7 +27,7 @@ export class UserSignInAction {
     const userResponse = await this.getUserResponse(payload.emailAddress);
 
     if (!userResponse) {
-      throw new UnauthorizedException("User not found!");
+      throw new UserNotFoundError();
     }
     const { passwordHash, ...user } = userResponse;
 
