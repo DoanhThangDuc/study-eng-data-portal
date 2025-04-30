@@ -14,12 +14,14 @@ import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInter
 import { AppRequest } from "../domains/InteractorContext";
 import { IllegalStateError } from "../pkgs/errors/IllegalStateError";
 import { Response } from "express";
+import { UserGetMeInteractor } from "../domains/Auth/UserGetMe/UserGetMeInteractor";
 
 @Controller("/v1")
 export class AuthController {
   constructor(
     private userSignUpInteractor: UserSignUpInteractor,
     private userSignInInteractor: UserSignInInteractor,
+    private userGetMeInteractor: UserGetMeInteractor,
   ) {}
 
   @Post("/auth/signup")
@@ -45,6 +47,10 @@ export class AuthController {
     return response.status(200).json(userResponse);
   }
 
+  @Get("/auth/me")
+  async getMe(@Req() request: AppRequest) {
+    return await this.userGetMeInteractor.execute(request);
+  }
   @Get("/auth/status")
   getStatus(@Req() request: AppRequest) {
     if (!request.user) {

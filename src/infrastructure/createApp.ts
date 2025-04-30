@@ -12,7 +12,7 @@ export async function createApp() {
   });
 
   app.enableCors({
-    origin: "*", 
+    origin: "*",
     allowedHeaders: "Authorization, *",
     exposedHeaders: "Authorization,RefreshToken",
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
