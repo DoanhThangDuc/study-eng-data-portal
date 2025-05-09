@@ -49,23 +49,23 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Fetch all secrets and update .env
-        id: update-env
-        run: |
-          secret_names=$(aws secretsmanager list-secrets --query "SecretList[].Name" --output text)
-          for secret_name in $secret_names; do
-            secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
-            if echo "$secret_value" | jq -e . >/dev/null 2>&1; then
-              echo "$secret_value" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read -r line; do
-                key=$(echo "$line" | cut -d '=' -f 1)
-                value=$(echo "$line" | cut -d '=' -f 2-)
-                grep -q "^$key=" .env && sed -i "s|^$key=.*|$key=$value|" .env || echo "$line" >> .env
-              done
-            else
-              secret_key=$(basename "$secret_name")
-              grep -q "^$secret_key=" .env && sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env || echo "$secret_key=$secret_value" >> .env
-            fi
-          done
+      # - name: Fetch all secrets and update .env
+      #   id: update-env
+      #   run: |
+      #     secret_names=$(aws secretsmanager list-secrets --query "SecretList[].Name" --output text)
+      #     for secret_name in $secret_names; do
+      #       secret_value=$(aws secretsmanager get-secret-value --secret-id $secret_name --query SecretString --output text)
+      #       if echo "$secret_value" | jq -e . >/dev/null 2>&1; then
+      #         echo "$secret_value" | jq -r 'to_entries[] | "\(.key)=\(.value)"' | while read -r line; do
+      #           key=$(echo "$line" | cut -d '=' -f 1)
+      #           value=$(echo "$line" | cut -d '=' -f 2-)
+      #           grep -q "^$key=" .env && sed -i "s|^$key=.*|$key=$value|" .env || echo "$line" >> .env
+      #         done
+      #       else
+      #         secret_key=$(basename "$secret_name")
+      #         grep -q "^$secret_key=" .env && sed -i "s|^$secret_key=.*|$secret_key=$secret_value|" .env || echo "$secret_key=$secret_value" >> .env
+      #       fi
+      #     done
 
       - name: Deploy to AWS EC2
         run: |
