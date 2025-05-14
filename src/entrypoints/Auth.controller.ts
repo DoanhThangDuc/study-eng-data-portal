@@ -1,7 +1,6 @@
 import {
   Body,
   Controller,
-  Get,
   Post,
   Req,
   Res,
@@ -13,7 +12,6 @@ import { UserSignInPayloadDto } from "../domains/Auth/dtos/UserSignInPayloadDto"
 import { UserSignInInteractor } from "../domains/Auth/UserSignIn/UserSignInInteractor";
 import { AppRequest } from "../domains/InteractorContext";
 import { Response } from "express";
-import { IllegalStateError } from "../pkgs/errors/IllegalStateError";
 
 @Controller("/v1")
 export class AuthController {
@@ -43,12 +41,5 @@ export class AuthController {
     response.setHeader("RefreshToken", refreshToken);
 
     return response.status(200).json(userResponse);
-  }
-  @Get("/auth/status")
-  getStatus(@Req() request: AppRequest) {
-    if (!request.user) {
-      throw new IllegalStateError("User not logged");
-    }
-    return request.user;
   }
 }
