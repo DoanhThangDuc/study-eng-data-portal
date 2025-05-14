@@ -25,6 +25,7 @@ export class UserSignInAction {
     userResponse: TokenUser;
   }> {
     const userResponse = await this.getUserResponse(payload.emailAddress);
+    console.log("userResponse :>> ", userResponse);
 
     if (!userResponse) {
       throw new UserNotFoundError();
